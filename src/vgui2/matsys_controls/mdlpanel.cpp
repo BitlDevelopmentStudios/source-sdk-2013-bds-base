@@ -75,9 +75,7 @@ CMDLPanel::CMDLPanel( vgui::Panel *pParent, const char *pName ) : BaseClass( pPa
 	SetIdentityMatrix( m_RootMDL.m_MDLToWorld );
 	m_RootMDL.m_pStudioHdr = NULL;
 	m_RootMDL.m_unMdlCacheSerial = 0;
-#ifdef BDSBASE
 	m_RootMDL.m_pIKContext = NULL;
-#endif
 	m_bDrawCollisionModel = false;
 	m_bWireFrame = false;
 	m_bGroundGrid = false;
@@ -98,13 +96,11 @@ CMDLPanel::~CMDLPanel()
 		delete m_RootMDL.m_pStudioHdr;
 		m_RootMDL.m_pStudioHdr = NULL;
 	}
-#ifdef BDSBASE
 	if (m_RootMDL.m_pIKContext)
 	{
 		delete m_RootMDL.m_pIKContext;
 		m_RootMDL.m_pIKContext = NULL;
 	}
-#endif
 }
 
 
@@ -170,13 +166,11 @@ void CMDLPanel::SetMDL( MDLHandle_t handle, void *pProxyData )
 	m_RootMDL.m_pStudioHdr = new CStudioHdr( m_RootMDL.m_MDL.GetStudioHdr(), g_pMDLCache );
 	m_RootMDL.m_MDL.m_pProxyData = pProxyData;
 
-#ifdef BDSBASE
 	if (m_RootMDL.m_pIKContext)
 	{
 		delete m_RootMDL.m_pIKContext;
 	}
 	m_RootMDL.m_pIKContext = new CIKContext;
-#endif
 
 	Vector vecMins, vecMaxs;
 	GetMDLBoundingBox( &vecMins, &vecMaxs, handle, m_RootMDL.m_MDL.m_nSequence );
@@ -355,11 +349,7 @@ void CMDLPanel::DrawCollisionModel()
 	CStudioHdr &studioHdr = *m_RootMDL.m_pStudioHdr;
 
 	matrix3x4_t pBoneToWorld[MAXSTUDIOBONES];
-#ifdef BDSBASE
 	SetupBones(m_RootMDL, pBoneToWorld);
-#else
-	m_RootMDL.m_MDL.SetUpBones(m_RootMDL.m_MDLToWorld, MAXSTUDIOBONES, pBoneToWorld);
-#endif
 
 	// PERFORMANCE: Just parse the script each frame.  It's fast enough for tools.  If you need
 	// this to go faster then cache off the bone index mapping in an array like HLMV does
@@ -481,11 +471,7 @@ void CMDLPanel::OnPaint3D()
 	SetupFlexWeights();
 
 	matrix3x4_t *pBoneToWorld = g_pStudioRender->LockBoneMatrices( studioHdr.numbones() );
-#ifdef BDSBASE
 	SetupBones(m_RootMDL, pBoneToWorld, m_PoseParameters, m_SequenceLayers, m_nNumSequenceLayers);
-#else
-	m_RootMDL.m_MDL.SetUpBones(m_RootMDL.m_MDLToWorld, studioHdr.numbones(), pBoneToWorld, m_PoseParameters, m_SequenceLayers, m_nNumSequenceLayers);
-#endif
 	g_pStudioRender->UnlockBoneMatrices();
 
 	IMaterial* pOverrideMaterial = GetOverrideMaterial( m_RootMDL.m_MDL.GetMDL() );
@@ -612,13 +598,9 @@ bool CMDLPanel::SetPoseParameterByName( const char *pszName, float fValue )
 		const mstudioposeparamdesc_t &Pose = studioHdr.pPoseParameter( i );
 		if ( V_strcasecmp( pszName, Pose.pszName() ) == 0 )
 		{
-#ifdef BDSBASE
 			float ctlValue;
 			Studio_SetPoseParameter(&studioHdr, i, fValue, ctlValue);
 			m_PoseParameters[i] = ctlValue;
-#else
-			m_PoseParameters[ i ] = fValue;
-#endif
 			return true;
 		}
 	}
@@ -1012,7 +994,6 @@ void CMDLPanel::ValidateMDLs()
 	}
 }
 
-#ifdef BDSBASE
 void CMDLPanel::SetupBones(MDLData_t& mdlData, matrix3x4_t* pBoneToWorld,
 	const float* pflPoseParameters /*= NULL*/, MDLSquenceLayer_t* pSequenceLayers /*= NULL*/, int nNumSequenceLayers /*= 0*/)
 {
@@ -1078,4 +1059,3 @@ void CMDLPanel::SetupBones(MDLData_t& mdlData, matrix3x4_t* pBoneToWorld,
 	Studio_RunBoneFlexDrivers(mdl.m_pFlexControls, pStudioHdr, pos, pBoneToWorld, mdlData.m_MDLToWorld);
 	Studio_BuildMatrices(pStudioHdr, renderAngles, renderOrigin, pos, q, -1, 1.0f, pBoneToWorld, BONE_USED_BY_ANYTHING_AT_LOD(mdl.m_nLOD));
 }
-#endif

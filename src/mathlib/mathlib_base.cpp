@@ -115,17 +115,6 @@ float (*pfInvRSquared)(const float* v) = _InvRSquared;
 void  (*pfFastSinCos)(float x, float* s, float* c) = SinCos;
 float (*pfFastCos)(float x) = cosf;
 
-#ifndef BDSBASE
-float SinCosTable[SIN_TABLE_SIZE];
-void InitSinCosTable()
-{
-	for( int i = 0; i < SIN_TABLE_SIZE; i++ )
-	{
-		SinCosTable[i] = sin(i * 2.0 * M_PI / SIN_TABLE_SIZE);
-	}
-}
-#endif
-
 qboolean VectorsEqual( const float *v1, const float *v2 )
 {
 	Assert( s_bMathlibInitialized );
@@ -360,14 +349,12 @@ void MatrixCopy( const matrix3x4_t& in, matrix3x4_t& out )
 {
 	Assert( s_bMathlibInitialized );
 
-#ifdef BDSBASE
 	// ??
 	if (in.Base() == NULL)
 		return;
 
 	if (out.Base() == NULL)
 		return;
-#endif
 
 	memcpy( out.Base(), in.Base(), sizeof( float ) * 3 * 4 );
 }
@@ -3414,9 +3401,6 @@ void MathLib_Init( float gamma, float texGamma, float brightness, int overbright
 
 	s_bMathlibInitialized = true;
 
-#ifndef BDSBASE
-	InitSinCosTable();
-#endif
 	BuildGammaTable( gamma, texGamma, brightness, overbright );
 }
 

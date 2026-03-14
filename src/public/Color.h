@@ -12,9 +12,7 @@
 #pragma once
 #endif
 
-#ifdef BDSBASE
 #include "tier1/strtools.h"
-#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: Basic handler for an rgb set of colors
@@ -28,7 +26,6 @@ public:
 	{
 		*((int *)this) = 0;
 	}
-#ifdef BDSBASE
 	// These first two support RGB and RGBA in Color255 and Color1 formats.
 	Color(float _r, float _g, float _b)
 	{
@@ -163,16 +160,6 @@ public:
 
 		SetColor(r, g, b, a);
 	}
-#else
-	Color(int _r, int _g, int _b)
-	{
-		SetColor(_r, _g, _b, 0);
-	}
-	Color(int _r, int _g, int _b, int _a)
-	{
-		SetColor(_r, _g, _b, _a);
-	}
-#endif
 	
 	// set the color
 	// r - red component (0-255)

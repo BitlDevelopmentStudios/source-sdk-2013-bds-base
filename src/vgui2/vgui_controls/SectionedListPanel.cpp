@@ -1181,7 +1181,6 @@ void SectionedListPanel::SetProportional(bool state)
 	}	
 }
 
-#ifdef BDSBASE
 //-----------------------------------------------------------------------------
 // Purpose: passes on mouse input state to children
 //-----------------------------------------------------------------------------
@@ -1194,7 +1193,6 @@ void SectionedListPanel::SetMouseInputEnabled(bool state)
 		m_Items[i]->SetMouseInputEnabled(state);
 	}
 }
-#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: sets whether or not the vertical scrollbar should ever be displayed

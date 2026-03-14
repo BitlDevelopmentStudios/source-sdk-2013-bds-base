@@ -83,12 +83,10 @@ public:
 	void ComputeCameraTransform( matrix3x4_t *pWorldToCamera );
 	void UpdateCameraTransform();
 
-#ifdef BDSBASE
 	void CreateDefaultLights();
 	void DestroyLights();
 	void ParseLightsFromKV(KeyValues* pLightsKV);
 	int GetLightCount() { return m_nLightCount; }
-#endif
 
 private:
 	// Inherited classes must implement this
@@ -143,12 +141,6 @@ protected:
 	virtual void SetupRenderState( int nDisplayWidth, int nDisplayHeight );
 
 private:
-#ifndef BDSBASE
-	void CreateDefaultLights();
-	void DestroyLights();
-	void ParseLightsFromKV( KeyValues *pLightsKV );
-#endif
-
 	CMaterialReference m_LightProbeBackground;
 	CMaterialReference m_LightProbeHDRBackground;
 	CTextureReference m_LightProbeCubemap;

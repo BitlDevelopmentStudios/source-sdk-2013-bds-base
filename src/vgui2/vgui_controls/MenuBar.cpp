@@ -221,12 +221,8 @@ void MenuBar::OnMenuClose()
 //-----------------------------------------------------------------------------
 // Purpose: Message map
 //-----------------------------------------------------------------------------
-#ifdef BDSBASE
 #ifdef PLATFORM_64BITS
 void MenuBar::OnCursorEnteredMenuButton(vgui::Panel* VPanel)
-#else
-void MenuBar::OnCursorEnteredMenuButton(int VPanel)
-#endif
 #else
 void MenuBar::OnCursorEnteredMenuButton(int VPanel)
 #endif

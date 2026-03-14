@@ -1547,7 +1547,6 @@ Color KeyValues::GetColor( const char *keyName )
 	KeyValues *dat = FindKey( keyName, false );
 	if ( dat )
 	{
-#ifdef BDSBASE
 		//first, check if it's a hex code before we move on to check its type.
 		if (dat->m_iDataType == TYPE_STRING)
 		{
@@ -1558,7 +1557,6 @@ Color KeyValues::GetColor( const char *keyName )
 				return color;
 			}
 		}
-#endif
 
 		if ( dat->m_iDataType == TYPE_COLOR )
 		{
@@ -2379,11 +2377,7 @@ bool KeyValues::LoadFromBuffer( char const *resourceName, CUtlBuffer &buf, IBase
 	{
 		// delete included keys!
 		int i;
-#ifdef BDSBASE
 		for (i = includedKeys.Count() - 1; i >= 0; i--)
-#else
-		for (i = includedKeys.Count() - 1; i > 0; i--)
-#endif
 		{
 			KeyValues *kv = includedKeys[ i ];
 			kv->deleteThis();
@@ -2690,11 +2684,7 @@ bool KeyValues::WriteAsBinary( CUtlBuffer &buffer )
 
 		case TYPE_UINT64:
 			{
-#ifdef BDSBASE
 				buffer.PutInt64(*((int64*)dat->m_sValue));
-#else
-				buffer.PutDouble( *((double *)dat->m_sValue) );
-#endif
 				break;
 			}
 

@@ -58,7 +58,6 @@ private:
 };*/
 #endif
 
-#ifdef BDSBASE
 #define SCRIPT_PATH "scripts/vscripts"
 
 static const char* g_pszScriptExtensions[] =
@@ -69,7 +68,6 @@ static const char* g_pszScriptExtensions[] =
 	".lua", // SL_LUA
 	".py",  // SL_PYTHON
 };
-#endif
 
 HSCRIPT VScriptCompileScript( const char *pszScriptName, bool bWarnMissing )
 {
@@ -78,20 +76,7 @@ HSCRIPT VScriptCompileScript( const char *pszScriptName, bool bWarnMissing )
 		return NULL;
 	}
 
-#ifndef BDSBASE
-	static const char* pszExtensions[] =
-	{
-		"",		// SL_NONE
-		".gm",	// SL_GAMEMONKEY
-		".nut",	// SL_SQUIRREL
-		".lua", // SL_LUA
-		".py",  // SL_PYTHON
-	};
-
-	const char* pszVMExtension = pszExtensions[g_pScriptVM->GetLanguage()];
-#else
 	const char* pszVMExtension = g_pszScriptExtensions[g_pScriptVM->GetLanguage()];
-#endif
 	const char *pszIncomingExtension = V_strrchr( pszScriptName , '.' );
 	if ( pszIncomingExtension && V_strcmp( pszIncomingExtension, pszVMExtension ) != 0 )
 	{
@@ -100,7 +85,6 @@ HSCRIPT VScriptCompileScript( const char *pszScriptName, bool bWarnMissing )
 	}
 
 	CFmtStr scriptPath;
-#ifdef BDSBASE
 	if (pszIncomingExtension)
 	{
 		scriptPath.sprintf(SCRIPT_PATH "/%s", pszScriptName);
@@ -109,16 +93,6 @@ HSCRIPT VScriptCompileScript( const char *pszScriptName, bool bWarnMissing )
 	{
 		scriptPath.sprintf(SCRIPT_PATH "/%s%s", pszScriptName, pszVMExtension);
 	}
-#else
-	if (pszIncomingExtension)
-	{
-		scriptPath.sprintf("scripts/vscripts/%s", pszScriptName);
-	}
-	else
-	{
-		scriptPath.sprintf("scripts/vscripts/%s%s", pszScriptName, pszVMExtension);
-	}
-#endif
 
 	const char *pBase;
 	CUtlBuffer bufferScript;
@@ -130,7 +104,6 @@ HSCRIPT VScriptCompileScript( const char *pszScriptName, bool bWarnMissing )
 	}
 	else
 	{
-#ifdef BDSBASE
 		bool bResult = false;
 
 		// ignore map-packed serverspawn files, allows server owners to run scripts before the map
@@ -142,9 +115,6 @@ HSCRIPT VScriptCompileScript( const char *pszScriptName, bool bWarnMissing )
 		{
 			bResult = filesystem->ReadFile(scriptPath, "GAME", bufferScript);
 		}
-#else
-		bool bResult = filesystem->ReadFile(scriptPath, "GAME", bufferScript);
-#endif
 
 		if( !bResult )
 		{
@@ -286,7 +256,6 @@ CON_COMMAND( script, "Run the text as a script" )
 	}
 }
 
-#ifdef BDSBASE
 static void ScriptFileAutocompleteRecursive(const char* pDirectory, const char* pExtension,
 	const char* pMatch, int& nMatches, const char* pCommandName, char commands[COMMAND_COMPLETION_MAXITEMS][COMMAND_COMPLETION_ITEM_LENGTH])
 {
@@ -342,20 +311,11 @@ static int script_execute_autocomplete(const char* partial, char commands[COMMAN
 	}
 	return nMatches;
 }
-#endif
 
-#ifdef BDSBASE
 #ifdef CLIENT_DLL
 CON_COMMAND_F_COMPLETION(script_execute_client, "Run a vscript file", FCVAR_NONE, script_execute_autocomplete)
 #else
 CON_COMMAND_F_COMPLETION(script_execute, "Run a vscript file", FCVAR_NONE, script_execute_autocomplete)
-#endif
-#else
-#ifdef CLIENT_DLL
-CON_COMMAND(script_execute_client, "Run a vscript file")
-#else
-CON_COMMAND(script_execute, "Run a vscript file")
-#endif
 #endif
 {
 #ifdef CLIENT_DLL

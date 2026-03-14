@@ -245,7 +245,6 @@ void TextImage::GetText(char *buffer, int bufferSize)
 //-----------------------------------------------------------------------------
 void TextImage::GetText(wchar_t *buffer, int bufLenInBytes)
 {
-#ifdef BDSBASE
 	if (!_textLen)
 	{
 		buffer[0] = L'\0';
@@ -254,9 +253,6 @@ void TextImage::GetText(wchar_t *buffer, int bufLenInBytes)
 	int iTerminator = Min((int)_textLen, (bufLenInBytes / (int)sizeof(wchar_t)) - 1);
 	wcsncpy(buffer, _utext, iTerminator);
 	buffer[iTerminator] = L'\0';
-#else
-	wcsncpy(buffer, _utext, bufLenInBytes / sizeof(wchar_t));
-#endif
 
 	if ( m_bAllCaps )
 	{

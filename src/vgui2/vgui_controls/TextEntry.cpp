@@ -3139,13 +3139,11 @@ void TextEntry::DeleteSelected()
 	// move the cursor to just after the deleted section
 	_cursorPos = x0;
 
-#ifdef BDSBASE
 	// scroll left if we need to
 	if (_horizScrollingAllowed && (_cursorPos < _currentStartIndex))
 	{
 		_currentStartIndex = _cursorPos;
 	}
-#endif
 	
 	_dataChanged = true;
 	
