@@ -7,16 +7,11 @@
 #include "cbase.h"
 #include "c_team_train_watcher.h"
 #include "igameevents.h"
-#ifndef BDSBASE
-#include "c_team_objectiveresource.h"
-#endif
 
 #ifdef TF_CLIENT_DLL
 #include "tf_shareddefs.h"
 #include "teamplayroundbased_gamerules.h"
-#ifdef BDSBASE
 #include "c_team_objectiveresource.h"
-#endif
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -162,7 +157,6 @@ void C_TeamTrainWatcher::OnDataChanged( DataUpdateType_t updateType )
 			gameeventmanager->FireEventClientSide( event );
 		}
 
-#ifdef BDSBASE
 #ifdef TF_CLIENT_DLL
 		// check to see if the train is now on a hill
 		if ( ObjectiveResource() )
@@ -177,24 +171,6 @@ void C_TeamTrainWatcher::OnDataChanged( DataUpdateType_t updateType )
 
 					bool state = ( m_flTotalProgress >= flStart && m_flTotalProgress <= flEnd );
 					ObjectiveResource()->SetTrainOnHill( GetTeamNumber(), i, state );
-				}
-			}
-		}
-#endif
-#else
-		// check to see if the train is now on a hill
-		if (ObjectiveResource())
-		{
-			int nNumHills = ObjectiveResource()->GetNumNodeHillData(GetTeamNumber());
-			if (nNumHills > 0)
-			{
-				float flStart = 0, flEnd = 0;
-				for (int i = 0; i < nNumHills; i++)
-				{
-					ObjectiveResource()->GetHillData(GetTeamNumber(), i, flStart, flEnd);
-
-					bool state = (m_flTotalProgress >= flStart && m_flTotalProgress <= flEnd);
-					ObjectiveResource()->SetTrainOnHill(GetTeamNumber(), i, state);
 				}
 			}
 		}

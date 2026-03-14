@@ -33,9 +33,7 @@ protected:
 	int			m_iEffectIndex;
 	bool		m_bActive;
 	bool		m_bOldActive;
-#ifdef BDSBASE
 	bool		m_bDestroyImmediately;
-#endif
 	float		m_flStartTime;	// Time at which the effect started
 
 	enum { kMAXCONTROLPOINTS = 63 }; ///< actually one less than the total number of cpoints since 0 is assumed to be me
@@ -59,9 +57,7 @@ BEGIN_RECV_TABLE_NOBASE( C_ParticleSystem, DT_ParticleSystem )
 
 	RecvPropInt( RECVINFO( m_iEffectIndex ) ),
 	RecvPropBool( RECVINFO( m_bActive ) ),
-#ifdef BDSBASE
 	RecvPropBool(RECVINFO(m_bDestroyImmediately)),
-#endif
 	RecvPropFloat( RECVINFO( m_flStartTime ) ),
 
 	RecvPropArray3( RECVINFO_ARRAY(m_hControlPointEnts), RecvPropEHandle( RECVINFO( m_hControlPointEnts[0] ) ) ),
@@ -115,7 +111,6 @@ void C_ParticleSystem::PostDataUpdate( DataUpdateType_t updateType )
 			}
 			else
 			{
-#ifdef BDSBASE
 				if (m_bDestroyImmediately)
 				{
 					ParticleProp()->StopEmissionAndDestroyImmediately();
@@ -124,9 +119,6 @@ void C_ParticleSystem::PostDataUpdate( DataUpdateType_t updateType )
 				{
 					ParticleProp()->StopEmission();
 				}
-#else
-				ParticleProp()->StopEmission();
-#endif
 			}
 		}
 	}
@@ -297,7 +289,6 @@ void ParticleEffectStopCallback( const CEffectData &data )
 
 DECLARE_CLIENT_EFFECT( "ParticleEffectStop", ParticleEffectStopCallback );
 
-#ifdef BDSBASE
 //======================================================================================================================
 // PARTICLE SYSTEM STOP AND DESTROY EFFECT
 //======================================================================================================================
@@ -317,4 +308,3 @@ void ParticleEffectDestroyImmediatelyCallback(const CEffectData& data)
 }
 
 DECLARE_CLIENT_EFFECT("ParticleEffectDestroyImmediately", ParticleEffectDestroyImmediatelyCallback);
-#endif

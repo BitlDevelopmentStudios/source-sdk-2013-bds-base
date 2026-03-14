@@ -119,10 +119,6 @@ ConVar fov_desired( "fov_desired", "75", FCVAR_ARCHIVE | FCVAR_USERINFO, "Sets t
 #define TF_HIGHFIVE_HINT_MINTIMEBETWEEN	10.0f
 ConVar tf_highfive_hintcount( "tf_highfive_hintcount", "0", FCVAR_CLIENTDLL | FCVAR_DONTRECORD | FCVAR_ARCHIVE, "Counts the number of times the high five hint has been displayed", true, 0, false, 0 );
 
-#ifndef BDSBASE
-ConVar tf_delete_temp_files("tf_delete_temp_files", "1", FCVAR_CLIENTDLL | FCVAR_ARCHIVE, "Delete custom player sprays and other temp files during shutdown");
-#endif
-
 ConVar tf_taunt_always_show_hint( "tf_taunt_always_show_hint", "1", FCVAR_CLIENTDLL );
 extern ConVar tf_allow_all_team_partner_taunt;
 extern ConVar tf_mvm_buybacks_method;
@@ -158,14 +154,6 @@ static bool HalloweenHandlesKeyInput( int down, ButtonCode_t keynum, const char 
 	C_TFPlayer *pPlayer = ToTFPlayer( C_BasePlayer::GetLocalPlayer() );
 	if ( pPlayer )
 	{
-#ifndef BDSBASE
-		// don't do anything while dancing
-		if (pPlayer->m_Shared.InCond(TF_COND_HALLOWEEN_THRILLER))
-		{
-			return true;
-		}
-#endif
-
 		// only allow +attack
 		if ( pPlayer->m_Shared.InCond( TF_COND_HALLOWEEN_GHOST_MODE ) )
 		{
@@ -463,7 +451,6 @@ void ClientModeTFNormal::Init()
 			pPanel->MakePopup( false );
 			m_pGameUI->SetLoadingBackgroundDialog( pPanel->GetVPanel() );
 
-#ifdef BDSBASE
 #ifndef BDSBASE_LEGACY_MAINMENU
 			IViewPortPanel *pMMOverride = ( gViewPortInterface->FindPanelByName( PANEL_MAINMENUOVERRIDE ) );
 			if ( pMMOverride )
@@ -472,13 +459,6 @@ void ClientModeTFNormal::Init()
 			}
 #else
 			m_pGameUI->SetMainMenuOverride(NULL);
-#endif
-#else
-			IViewPortPanel* pMMOverride = (gViewPortInterface->FindPanelByName(PANEL_MAINMENUOVERRIDE));
-			if (pMMOverride)
-			{
-				((CHudMainMenuOverride*)pMMOverride)->AttachToGameUI();
-			}
 #endif
 		}
 	}
@@ -544,19 +524,9 @@ void ClientModeTFNormal::Init()
 //-----------------------------------------------------------------------------
 void ClientModeTFNormal::Shutdown()
 {
-#ifndef BDSBASE
-	if (tf_delete_temp_files.GetBool())
-	{
-		RemoveFilesInPath("materials/temp");
-		RemoveFilesInPath("download/user_custom");
-	}
-#endif
-
 	DestroyStatsSummaryPanel();
 
-#ifdef BDSBASE
 	BaseClass::Shutdown();
-#endif
 }
 
 void ClientModeTFNormal::InitViewport()
@@ -1816,37 +1786,6 @@ void ClientModeTFNormal::AskFavoriteOrBlacklist() const
 		}
 	}
 }
-
-#ifndef BDSBASE
-//----------------------------------------------------------------------------
-void ClientModeTFNormal::RemoveFilesInPath(const char* pszPath) const
-{
-	FileFindHandle_t hFind = NULL;
-
-	const char* pszSearch = CFmtStr("%s/*", pszPath);
-	char const* szFileName = g_pFullFileSystem->FindFirstEx(pszSearch, "MOD", &hFind);
-	while (szFileName)
-	{
-		if (szFileName[0] != '.')
-		{
-			CFmtStr fmtFilename("%s/%s", pszPath, szFileName);
-
-			if (g_pFullFileSystem->IsDirectory(fmtFilename, "MOD"))
-			{
-				RemoveFilesInPath(fmtFilename);
-			}
-			else
-			{
-				g_pFullFileSystem->RemoveFile(fmtFilename, "MOD");
-			}
-		}
-
-		szFileName = g_pFullFileSystem->FindNext(hFind);
-	}
-
-	g_pFullFileSystem->FindClose(hFind);
-}
-#endif
 
 //----------------------------------------------------------------------------
 void ClientModeTFNormal::Update()

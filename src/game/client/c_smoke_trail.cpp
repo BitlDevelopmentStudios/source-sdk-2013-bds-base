@@ -948,14 +948,10 @@ void C_SporeExplosion::OnDataChanged( DataUpdateType_t updateType )
 		m_teParticleSpawn.Init( m_flSpawnRate );
 	}
 
-#ifdef BDSBASE
 	if (m_pSporeEffect.IsValid())
 	{
 		m_pSporeEffect->SetDontRemove(m_bDontRemove);
 	}
-#else
-	m_pSporeEffect->SetDontRemove(m_bDontRemove);
-#endif // BDSBASE
 }
 
 //-----------------------------------------------------------------------------
@@ -986,12 +982,10 @@ void C_SporeExplosion::Start( CParticleMgr *pParticleMgr, IPrototypeArgAccess *p
 //-----------------------------------------------------------------------------
 void C_SporeExplosion::AddParticles( void )
 {
-#ifdef BDSBASE
 	if (!m_pSporeEffect)
 	{
 		return;
 	}
-#endif
 
 	//Spores
 	Vector	offset;

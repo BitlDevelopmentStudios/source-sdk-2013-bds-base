@@ -58,11 +58,7 @@ static const Language_t s_LanguageNames[] =
 	{	"Bulgarian",			"bulgarian",	"#GameUI_Language_Bulgarian",			"bg_BG",	k_Lang_Bulgarian,			1026 },
 	{	"Greek",				"greek",		"#GameUI_Language_Greek",				"el_GR",	k_Lang_Greek,				1032 },
 	{	"Ukrainian",			"ukrainian",	"#GameUI_Language_Ukrainian",			"uk_UA",	k_Lang_Ukrainian,			1058 },
-#ifdef BDSBASE
 	{	"Latam_Spanish",		"latam",		"#GameUI_Language_Latam_Spanish",		"es_419",	k_Lang_Latam_Spanish,		2058 },
-#else
-	{	"Latam_Spanish",		"latam",		"#GameUI_Language_Latam_Spanish",		"es_419",	k_Lang_Latam_Spanish,		1034 },
-#endif
 };	
 
 //-----------------------------------------------------------------------------

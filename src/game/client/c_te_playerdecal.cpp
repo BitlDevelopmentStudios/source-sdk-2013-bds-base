@@ -105,7 +105,6 @@ CLIENTEFFECT_MATERIAL( "decals/playerlogo61" )
 CLIENTEFFECT_MATERIAL( "decals/playerlogo62" )
 CLIENTEFFECT_MATERIAL( "decals/playerlogo63" )
 CLIENTEFFECT_MATERIAL( "decals/playerlogo64" )
-#ifdef BDSBASE
 #if MAX_PLAYERS > 65
 CLIENTEFFECT_MATERIAL("decals/playerlogo65")
 CLIENTEFFECT_MATERIAL("decals/playerlogo66")
@@ -143,7 +142,6 @@ CLIENTEFFECT_MATERIAL("decals/playerlogo97")
 CLIENTEFFECT_MATERIAL("decals/playerlogo98")
 CLIENTEFFECT_MATERIAL("decals/playerlogo99")
 CLIENTEFFECT_MATERIAL("decals/playerlogo100")
-#endif
 #endif
 #endif
 CLIENTEFFECT_REGISTER_END()

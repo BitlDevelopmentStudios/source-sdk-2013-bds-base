@@ -31,7 +31,6 @@ class CBaseEntityScriptInstanceHelper : public IScriptInstanceHelper
 
 extern CBaseEntityScriptInstanceHelper g_BaseEntityScriptInstanceHelper;
 
-#ifdef BDSBASE
 #ifdef USE_NAV_MESH
 class CNavAreaScriptInstanceHelper : public IScriptInstanceHelper
 {
@@ -48,23 +47,6 @@ class INextBotComponentScriptInstanceHelper : public IScriptInstanceHelper
 };
 
 extern INextBotComponentScriptInstanceHelper g_NextBotComponentScriptInstanceHelper;
-#endif
-#else
-#ifdef TF_DLL
-class CNavAreaScriptInstanceHelper : public IScriptInstanceHelper
-{
-	bool ToString( void *p, char *pBuf, int bufSize );
-};
-
-extern CNavAreaScriptInstanceHelper g_NavAreaScriptInstanceHelper;
-
-class INextBotComponentScriptInstanceHelper : public IScriptInstanceHelper
-{
-	bool ToString( void *p, char *pBuf, int bufSize );
-};
-
-extern INextBotComponentScriptInstanceHelper g_NextBotComponentScriptInstanceHelper;
-#endif
 #endif
 
 // Only allow scripts to create entities during map initialization
@@ -92,7 +74,6 @@ public:
 	KeyValues *m_pKeyValues;	// actual KeyValue entity
 };
 
-#ifdef BDSBASE
 // ----------------------------------------------------------------------------
 // Player Messages access
 // ----------------------------------------------------------------------------
@@ -146,7 +127,6 @@ private:
 	char m_szDataValues[MAX_SCRIPT_USERMESSAGE_DATA][512];
 	int m_iDataTypes[MAX_SCRIPT_USERMESSAGE_DATA];
 };
-#endif
 
 class CVScriptGameEventListener : public CGameEventListener
 {

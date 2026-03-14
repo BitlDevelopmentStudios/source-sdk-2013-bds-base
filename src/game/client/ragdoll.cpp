@@ -28,9 +28,7 @@ CRagdoll::CRagdoll()
 	m_ragdoll.listCount = 0;
 	m_vecLastOrigin.Init();
 	m_flLastOriginChangeTime = - 1.0f;
-#ifdef BDSBASE
 	m_flBoneCacheTime = -FLT_MAX;
-#endif
 	m_lastUpdate = -FLT_MAX;
 }
 
@@ -176,7 +174,6 @@ void CRagdoll::RagdollBone( C_BaseEntity *ent, mstudiobone_t *pbones, int boneCo
 	}
 }
 
-#ifdef BDSBASE
 void CRagdoll::AcquireOrCopyBoneCache(matrix3x4_t* pOutBonesToWorld, int boneCount)
 {
 	// acquire cache if not setup
@@ -201,7 +198,6 @@ void CRagdoll::AcquireOrCopyBoneCache(matrix3x4_t* pOutBonesToWorld, int boneCou
 		m_flBoneCacheTime = gpGlobals->curtime;
 	}
 }
-#endif
 
 const Vector& CRagdoll::GetRagdollOrigin( )
 {

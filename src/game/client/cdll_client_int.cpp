@@ -343,7 +343,6 @@ static ConVar s_CV_ShowParticleCounts("showparticlecounts", "0", 0, "Display num
 static ConVar s_cl_team("cl_team", "default", FCVAR_USERINFO|FCVAR_ARCHIVE, "Default team when joining a game");
 static ConVar s_cl_class("cl_class", "default", FCVAR_USERINFO|FCVAR_ARCHIVE, "Default class when joining a game");
 
-#ifdef BDSBASE
 ConVar cl_backgroundmap_music("cl_backgroundmap_music", "1", FCVAR_ARCHIVE);
 ConVar cl_backgroundmap_music_volume("cl_backgroundmap_music_volume", "1.0", FCVAR_ARCHIVE);
 ConVar cl_backgroundmap_music_duck("cl_backgroundmap_music_duck", "1.0", FCVAR_ARCHIVE);
@@ -356,7 +355,6 @@ static ConVar cl_discord_mapicon("cl_discord_mapicon", "0", FCVAR_DEVELOPMENTONL
 static int64_t startTimestamp = time(0);
 
 static ConVar cl_discord("cl_discord", "1", FCVAR_ARCHIVE);
-#endif
 #endif
 #endif
 
@@ -1295,12 +1293,10 @@ void CHLClient::PostInit()
 	}
 #endif
 
-#ifdef BDSBASE
 #if !defined( _X360 ) && !defined( NO_STEAM )
 	// This needs to be called every time the game is launched since Steam doesn't save the updated position
 	extern void SetSteamOverlayToastPosition(void); // from clientmode_shared.cpp
 	SetSteamOverlayToastPosition();
-#endif
 #endif
 
 	if ( !r_lightmap_bicubic_set.GetBool() && materials )
@@ -1846,7 +1842,6 @@ void CHLClient::LevelInitPreEntity( char const* pMapName )
 #endif
 }
 
-#ifdef BDSBASE
 int StartBackgroundMapMusic(float flVolume)
 {
 	/* mostly from GameUI */
@@ -1922,7 +1917,6 @@ int StartBackgroundMapMusic(float flVolume)
 
 	return (nBackgroundMusicGUID);
 }
-#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: Per level init
@@ -1933,7 +1927,6 @@ void CHLClient::LevelInitPostEntity( )
 	C_PhysPropClientside::RecreateAll();
 	internalCenterPrint->Clear();
 
-#ifdef BDSBASE
 	if (cl_backgroundmap_music.GetBool() && engine->IsLevelMainMenuBackground())
 	{
 		int id = StartBackgroundMapMusic(cl_backgroundmap_music_volume.GetFloat());
@@ -1946,7 +1939,6 @@ void CHLClient::LevelInitPostEntity( )
 			DevWarning("No music is playing\n");
 		}
 	}
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -1968,7 +1960,6 @@ void CHLClient::ResetStringTablePointers()
 #endif
 }
 
-#ifdef BDSBASE
 static void ClearClientDynamicModelList()
 {
 #ifndef BDSBASE_TEMP_FIXDYNAMICMODELS
@@ -1984,7 +1975,6 @@ static void ClearClientDynamicModelList()
 		static_cast<CModelInfo*>(modelinfo)->m_vecDynamicModels.Purge();
 	}
 }
-#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: Per level de-init
@@ -2057,9 +2047,7 @@ void CHLClient::LevelShutdown( void )
 
 	messagechars->Clear();
 
-#ifdef BDSBASE
 	ClearClientDynamicModelList();
-#endif
 
 #ifndef TF_CLIENT_DLL
 	// don't want to do this for TF2 because we have particle systems in our

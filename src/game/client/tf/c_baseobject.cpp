@@ -153,15 +153,9 @@ void C_BaseObject::UpdateOnRemove( void )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-#ifdef BDSBASE
 void C_BaseObject::OnPreDataChanged(DataUpdateType_t updateType)
 {
 	BaseClass::OnPreDataChanged(updateType);
-#else
-void C_BaseObject::PreDataUpdate(DataUpdateType_t updateType)
-{
-	BaseClass::PreDataUpdate(updateType);
-#endif
 
 	m_iOldHealth = m_iHealth;
 	m_hOldOwner = GetOwner();
@@ -485,11 +479,7 @@ int C_BaseObject::DrawModel( int flags )
 
 float C_BaseObject::GetReversesBuildingConstructionSpeed( void )
 {
-#ifdef BDSBASE
 	if (HasSapper() && m_takedamage != DAMAGE_NO)
-#else
-	if (HasSapper())
-#endif
 	{
 		C_ObjectSapper *pSapper = dynamic_cast< C_ObjectSapper* >( FirstMoveChild() );
 		if ( pSapper )
@@ -1017,7 +1007,6 @@ void C_BaseObject::GetTargetIDDataString( OUT_Z_BYTECAP(iMaxLenInBytes) wchar_t 
 	}
 
 	// level 1 and 2 show upgrade progress
-#ifdef BDSBASE
 	int CanUpgradeMiniBuilding = 0;
 
 	if (pBuilder)
@@ -1026,9 +1015,6 @@ void C_BaseObject::GetTargetIDDataString( OUT_Z_BYTECAP(iMaxLenInBytes) wchar_t 
 	}
 
 	if ( !(IsMiniBuilding() && !CanUpgradeMiniBuilding) && !IsDisposableBuilding() )
-#else
-	if ( !IsMiniBuilding() && !IsDisposableBuilding() )
-#endif
 	{
 		_snwprintf( wszUpgradeProgress, ARRAYSIZE(wszUpgradeProgress) - 1, L"%d / %d", m_iUpgradeMetal, GetUpgradeMetalRequired() );
 		wszUpgradeProgress[ ARRAYSIZE(wszUpgradeProgress)-1 ] = '\0';

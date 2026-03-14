@@ -121,11 +121,7 @@ inline ClientThinkHandle_t CClientThinkList::GetInvalidThinkHandle()
 
 inline CClientThinkList::ThinkEntry_t* CClientThinkList::GetThinkEntry( ClientThinkHandle_t hThink )
 {
-#ifdef BDSBASE
 	return &m_ThinkEntries[(uintp)hThink];
-#else
-	return &m_ThinkEntries[(unsigned long)hThink];
-#endif
 }
 
 

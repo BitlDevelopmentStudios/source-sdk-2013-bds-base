@@ -1156,14 +1156,11 @@ const char *CEquipSlotItemSelectionPanel::GetItemNotSelectableReason( const CEco
 
 	CTFItemDefinition *pItemData = pItem->GetStaticData();
 
-#ifdef BDSBASE
 	bool bFinalCheck = GetItemSchema()->FindItemInWhitelist(pItemData->GetDefinitionIndex());
 
 	//instead of deleting the item in the panel, grey the panel out.
 	if (!bFinalCheck)
 		return "#Econ_GreyOutReason_CannotBeUsedInMod";
-
-#endif
 
 	if ( !pItemData->CanBeUsedByClass(m_iClass) )
 		return "#Econ_GreyOutReason_CannotBeUsedByThisClass";
@@ -1395,14 +1392,11 @@ const char *CItemCriteriaSelectionPanel::GetItemNotSelectableReason( const CEcon
 
 	CTFItemDefinition *pItemData = pItem->GetStaticData();
 
-#ifdef BDSBASE
 	bool bFinalCheck = GetItemSchema()->FindItemInWhitelist(pItemData->GetDefinitionIndex());
 
 	//instead of deleting the item in the panel, grey the panel out.
 	if (!bFinalCheck)
 		return "#Econ_GreyOutReason_CannotBeUsedInMod";
-
-#endif
 
 	return m_pCriteria->BEvaluate( pItemData ) ? NULL : "";
 }
@@ -1450,15 +1444,12 @@ const char *CCraftingItemSelectionPanel::GetItemNotSelectableReason( const CEcon
 	if ( !pItem )
 		return NULL;
 
-#ifdef BDSBASE
 	CTFItemDefinition* pItemData = pItem->GetStaticData();
 	bool bFinalCheck = GetItemSchema()->FindItemInWhitelist(pItemData->GetDefinitionIndex());
 
 	//instead of deleting the item in the panel, grey the panel out.
 	if (!bFinalCheck)
 		return "#Econ_GreyOutReason_CannotBeUsedInMod";
-
-#endif
 
 	// Must not be marked no-craft
 	if ( !pItem->IsUsableInCrafting() )
@@ -1509,14 +1500,11 @@ const char *CAccountSlotItemSelectionPanel::GetItemNotSelectableReason( const CE
 
 	CTFItemDefinition *pItemData = pItem->GetStaticData();
 
-#ifdef BDSBASE
 	bool bFinalCheck = GetItemSchema()->FindItemInWhitelist(pItemData->GetDefinitionIndex());
 
 	//instead of deleting the item in the panel, grey the panel out.
 	if (!bFinalCheck)
 		return "#Econ_GreyOutReason_CannotBeUsedInMod";
-
-#endif
 
 	if ( pItemData->GetEquipType() != EEquipType_t::EQUIP_TYPE_ACCOUNT ) 
 		return "#Econ_GreyOutReason_CannotBeUsedByThisClass";

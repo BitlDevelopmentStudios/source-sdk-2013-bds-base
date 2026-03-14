@@ -3,7 +3,6 @@
 #include "gifhelper.h"
 #include "gif_lib.h"
 
-#ifdef BDSBASE
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
@@ -259,4 +258,3 @@ void CGIFHelper::GetScreenSize( int& iWide, int& iTall ) const
 	iWide = m_pImage->SWidth;
 	iTall = m_pImage->SHeight;
 }
-#endif

@@ -43,9 +43,7 @@
 
 #ifdef TF_CLIENT_DLL
 #include "c_tf_player.h"
-#ifdef BDSBASE
 #include "tf_dropped_weapon.h"
-#endif
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -460,9 +458,7 @@ BEGIN_RECV_TABLE_NOBASE(C_BaseEntity, DT_BaseEntity)
 	RecvPropInt(RECVINFO(m_clrRender)),
 	RecvPropInt(RECVINFO(m_iTeamNum)),
 	RecvPropInt(RECVINFO(m_CollisionGroup)),
-#ifdef BDSBASE
 	RecvPropFloat(RECVINFO(m_flGravity)),
-#endif
 	RecvPropFloat(RECVINFO(m_flElasticity)),
 	RecvPropFloat(RECVINFO(m_flShadowCastDistance)),
 	RecvPropEHandle( RECVINFO(m_hOwnerEntity) ),
@@ -1378,14 +1374,10 @@ void C_BaseEntity::UpdateVisibility()
 	// TF prevents drawing of any entity attached to players that aren't items in the inventory of the player.
 	// This is to prevent servers creating fake cosmetic items and attaching them to players.
 
-#ifdef BDSBASE
 	//except in some instances, where we need to show players items held by bots or any custom items from quiver.
 	bool bForceAllow = true;
 
 	if (!engine->IsPlayingDemo() && !bForceAllow)
-#else
-	if (!engine->IsPlayingDemo())
-#endif
 	{
 		static bool bIsStaging = ( engine->GetAppID() == 810 );
 		if ( !m_bValidatedOwner )
@@ -3823,17 +3815,12 @@ void C_BaseEntity::RemoveAllDecals( void )
 
 bool C_BaseEntity::SnatchModelInstance( C_BaseEntity *pToEntity )
 {
-#ifdef BDSBASE
 	ModelInstanceHandle_t handle = GetModelInstance();
 	if (!modelrender->ChangeInstance(handle, pToEntity))
 		return false;  // engine could move modle handle
 
 	// engine bugfix: remove stale shadow data
 	shadowmgr->RemoveAllShadowsFromModel(handle);
-#else
-	if ( !modelrender->ChangeInstance(  GetModelInstance(), pToEntity ) )
-		return false;  // engine could move modle handle
-#endif
 
 	// remove old handle from toentity if any
 	if ( pToEntity->GetModelInstance() != MODEL_INSTANCE_INVALID )
@@ -6337,7 +6324,6 @@ void C_BaseEntity::RemoveFromTeleportList()
 #ifdef TF_CLIENT_DLL
 bool C_BaseEntity::ValidateEntityAttachedToPlayer( bool &bShouldRetry )
 {
-#ifdef BDSBASE
 	bShouldRetry = false;
 	C_BaseEntity* pParent = GetRootMoveParent();
 	if (pParent == this)
@@ -6361,58 +6347,6 @@ bool C_BaseEntity::ValidateEntityAttachedToPlayer( bool &bShouldRetry )
 	}
 
 	return true;
-#else
-	bShouldRetry = false;
-	C_BaseEntity *pParent = GetRootMoveParent();
-	if ( pParent == this )
-		return true;
-
-	// Some wearables parent to the view model
-	C_TFPlayer *pPlayer = ToTFPlayer( pParent );
-	if ( pPlayer )
-	{
-		if ( pPlayer->GetViewModel() == this )
-			return true;
-
-		if ( pPlayer->HasItem() && ( pPlayer->GetItem()->GetItemID() == TF_ITEM_CAPTURE_FLAG ) && ( pPlayer->GetItem() == this ) )
-			return true;
-	}
-
-	// always allow the briefcase model
-	const char *pszModel = modelinfo->GetModelName( GetModel() );
-	if ( pszModel && pszModel[0] )
-	{
-		if ( FStrEq( pszModel, "models/flag/briefcase.mdl" ) )
-			return true;
-				
-		if ( FStrEq( pszModel, "models/props_doomsday/australium_container.mdl" ) )
-			return true;
-
-		// Temp for MVM testing
-		if ( FStrEq( pszModel, "models/buildables/sapper_placement.mdl" ) )
-			return true;
-
-		if ( FStrEq( pszModel, "models/props_td/atom_bomb.mdl" ) )
-			return true;
-
-		if ( FStrEq( pszModel, "models/props_lakeside_event/bomb_temp_hat.mdl" ) )
-			return true;
-
-		if ( FStrEq( pszModel, "models/props_moonbase/powersupply_flag.mdl" ) )
-			return true;
-
-		// The Halloween 2014 doomsday flag replacement
-		if ( FStrEq( pszModel, "models/flag/ticket_case.mdl" ) )
-			return true;
-
-		if ( FStrEq( pszModel, "models/weapons/c_models/c_grapple_proj/c_grapple_proj.mdl" ) )
-			return true;
-	}
-
-	// Any entity that's not an item parented to a player is invalid.
-	// This prevents them creating some other entity to pretend to be a cosmetic item.
-	return !pParent->IsPlayer();
-#endif
 }
 #endif // TF_CLIENT_DLL
 

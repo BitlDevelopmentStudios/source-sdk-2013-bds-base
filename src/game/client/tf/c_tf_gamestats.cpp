@@ -91,23 +91,14 @@ const char *g_ItemEventNames[] =
 	"item_used_tool",
 	"item_used_consumable",
 	"item_removed_attrib",
-#ifdef BDSBASE
 	"item_changed_style",
-#else
-	"item_changed_style"
-#endif
 
 	// NEW STORE EVENTS
 	"store2_entered",	// This gets written *in addition* to IE_STORE_ENTERED
 
 	// THESE STORED AS INTEGERS IN THE DATABASE SO THESE ARE NEW
 	"item_reset_counters",
-#ifndef BDSBASE
-	"item_put_into_collection",
-	""	// IE_COUNT
-#else
 	"item_put_into_collection"
-#endif
 };
 
 COMPILE_TIME_ASSERT( ARRAYSIZE( g_ItemEventNames ) == IE_COUNT );

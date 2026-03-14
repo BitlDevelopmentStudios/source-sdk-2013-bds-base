@@ -115,9 +115,7 @@ ConVar	spec_freeze_distance_min( "spec_freeze_distance_min", "96", FCVAR_CHEAT, 
 ConVar	spec_freeze_distance_max( "spec_freeze_distance_max", "200", FCVAR_CHEAT, "Maximum random distance from the target to stop when framing them in observer freeze cam." );
 #endif
 
-#ifdef BDSBASE
 static ConVar	cl_ear_ringing("cl_ear_ringing", "1", FCVAR_USERINFO | FCVAR_ARCHIVE | FCVAR_SERVER_CAN_EXECUTE, "");
-#endif
 
 static ConVar	cl_first_person_uses_world_model ( "cl_first_person_uses_world_model", "0", FCVAR_NONE, "Causes the third person model to be drawn instead of the view model" );
 
@@ -218,9 +216,7 @@ BEGIN_RECV_TABLE_NOBASE( CPlayerLocalData, DT_Local )
 	RecvPropInt( RECVINFO( m_audio.entIndex ) ),
 
 	RecvPropString( RECVINFO( m_szScriptOverlayMaterial ) ),
-#ifdef BDSBASE
 	RecvPropArray3(RECVINFO_ARRAY(m_szScriptOverlayMaterialArray), RecvPropString(RECVINFO_ARRAY(m_szScriptOverlayMaterialArray))),
-#endif // 
 
 END_RECV_TABLE()
 
@@ -312,9 +308,7 @@ END_RECV_TABLE()
 
 		RecvPropString( RECVINFO(m_szLastPlaceName) ),
 
-#ifdef BDSBASE
 		RecvPropBool(RECVINFO(m_bTyping)),
-#endif
 
 #if defined USES_ECON_ITEMS
 		RecvPropUtlVector( RECVINFO_UTLVECTOR( m_hMyWearables ), MAX_WEARABLES_SENT_FROM_SERVER,	RecvPropEHandle(NULL, 0, 0) ),
@@ -431,10 +425,8 @@ C_BasePlayer::C_BasePlayer() : m_iv_vecViewOffset( "C_BasePlayer::m_iv_vecViewOf
 {
 	AddVar( &m_vecViewOffset, &m_iv_vecViewOffset, LATCH_SIMULATION_VAR );
 
-#ifdef BDSBASE
 	AddVar(&m_Local.m_vecPunchAngle, &m_Local.m_iv_vecPunchAngle, LATCH_SIMULATION_VAR);
 	AddVar(&m_Local.m_vecPunchAngleVel, &m_Local.m_iv_vecPunchAngleVel, LATCH_SIMULATION_VAR);
-#endif
 	
 #ifdef _DEBUG																
 	m_vecLadderNormal.Init();
@@ -466,9 +458,7 @@ C_BasePlayer::C_BasePlayer() : m_iv_vecViewOffset( "C_BasePlayer::m_iv_vecViewOf
 
 	m_bFiredWeapon = false;
 
-#ifdef BDSBASE
 	m_bTyping = false;
-#endif
 
 	m_nForceVisionFilterFlags = 0;
 	m_nLocalPlayerVisionFlags = 0;
@@ -655,9 +645,7 @@ void C_BasePlayer::SetObserverMode ( int iNewMode )
 		}
 	}
 
-#ifdef BDSBASE
 	UpdateVisibility();
-#endif
 }
 
 
@@ -814,14 +802,10 @@ void C_BasePlayer::OnPreDataChanged( DataUpdateType_t updateType )
 {
 	for (int i = 0; i < MAX_AMMO_TYPES; ++i)
 	{
-#ifdef BDSBASE
 		if (GetAmmoCount(i) < m_iOldAmmo[i])
 		{
 			m_iOldAmmo[i] = GetAmmoCount(i);
 		}
-#else
-		m_iOldAmmo[i] = GetAmmoCount(i);
-#endif
 	}
 
 	m_bWasFreezeFraming = (GetObserverMode() == OBS_MODE_FREEZECAM);
@@ -1062,10 +1046,8 @@ void C_BasePlayer::OnDataChanged( DataUpdateType_t updateType )
 		{
 			if ( GetAmmoCount(i) > m_iOldAmmo[i] )
 			{
-#ifdef BDSBASE
 				int iCount = abs(GetAmmoCount(i) - m_iOldAmmo[i]);
 				m_iOldAmmo[i] = GetAmmoCount(i);
-#endif
 
 				// Don't add to ammo pickup if the ammo doesn't do it
 				const FileWeaponInfo_t *pWeaponData = gWR.GetWeaponFromAmmo(i);
@@ -1076,11 +1058,7 @@ void C_BasePlayer::OnDataChanged( DataUpdateType_t updateType )
 					CHudHistoryResource *pHudHR = GET_HUDELEMENT( CHudHistoryResource );
 					if( pHudHR )
 					{
-#ifdef BDSBASE
 						pHudHR->AddToHistory(HISTSLOT_AMMO, i, iCount);
-#else
-						pHudHR->AddToHistory(HISTSLOT_AMMO, i, abs(GetAmmoCount(i) - m_iOldAmmo[i]));
-#endif
 					}
 				}
 			}

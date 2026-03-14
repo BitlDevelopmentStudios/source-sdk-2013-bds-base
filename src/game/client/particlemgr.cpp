@@ -146,9 +146,7 @@ CParticleEffectBinding::CParticleEffectBinding()
 	m_LastMin = m_Min;
 	m_LastMax = m_Max;
 
-#ifdef BDSBASE
 	m_flParticleCullRadius = -1.f; // dummy value, is overwritten below
-#endif
 	SetParticleCullRadius( 0.0f );
 	m_nActiveParticles = 0;
 

@@ -156,9 +156,7 @@ wchar_t* ReadLocalizedString( bf_read &msg, OUT_Z_BYTECAP(outSizeInBytes) wchar_
 	return pOut;
 }
 
-#ifdef BDSBASE
 extern ConVar mp_enable_coloredtext;
-#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: Reads a string from the current message, converts it to unicode, and strips out color codes
@@ -183,7 +181,7 @@ wchar_t* ReadChatTextString( bf_read &msg, OUT_Z_BYTECAP(outSizeInBytes) wchar_t
 				// mark the next seven or nine characters. one for the control character and six or eight for the code itself.
 				const int nSkip = ( *test == COLOR_HEXCODE ? 7 : 9 );
 
-#ifdef BDSBASE
+
 				if (mp_enable_coloredtext.GetBool())
 				{
 					for (int i = 0; i < nSkip && *test != 0; i++, test++)
@@ -198,12 +196,6 @@ wchar_t* ReadChatTextString( bf_read &msg, OUT_Z_BYTECAP(outSizeInBytes) wchar_t
 						*++test = COLOR_NORMAL;
 					}
 				}
-#else
-				for (int i = 0; i < nSkip && *test != 0; i++, test++)
-				{
-					*test = COLOR_NORMAL;
-				}
-#endif
 
 				// if we reached the end of the string first, then back up
 				if ( *test == 0 )
@@ -813,10 +805,6 @@ void CBaseHudChat::MsgFunc_SayText( bf_read &msg )
 
 	CLocalPlayerFilter filter;
 	C_BaseEntity::EmitSound( filter, SOUND_FROM_LOCAL_PLAYER, "HudChat.Message" );
-
-#ifndef BDSBASE
-	Msg( "%s", szString );
-#endif
 }
 
 int CBaseHudChat::GetFilterForString( const char *pString )
@@ -875,10 +863,6 @@ void CBaseHudChat::MsgFunc_SayText2( bf_read &msg )
 
 		// print raw chat text
 		ChatPrintf( client, iFilter, "%s", ansiString );
-
-#ifndef BDSBASE
-		Msg( "%s\n", RemoveColorMarkup(ansiString) );
-#endif
 
 		CLocalPlayerFilter filter;
 		C_BaseEntity::EmitSound( filter, SOUND_FROM_LOCAL_PLAYER, "HudChat.Message" );
@@ -965,9 +949,6 @@ void CBaseHudChat::MsgFunc_TextMsg( bf_read &msg )
 			Q_strncat( szString, "\n", sizeof(szString), 1 );
 		}
 		Printf( CHAT_FILTER_NONE, "%s", ConvertCRtoNL( szString ) );
-#ifndef BDSBASE
-		Msg( "%s", ConvertCRtoNL( szString ) );
-#endif
 		break;
 
 	case HUD_PRINTCONSOLE:
@@ -1214,11 +1195,7 @@ void CBaseHudChat::StartMessageMode( int iMessageModeType )
 	{
 		case MM_SAY:		pszPrompt = g_pVGuiLocalize->Find( "#chat_say" ); break;
 		case MM_SAY_TEAM:	pszPrompt = g_pVGuiLocalize->Find( "#chat_say_team" ); break;
-#ifdef BDSBASE
 		case MM_SAY_PARTY:	pszPrompt = g_pVGuiLocalize->Find("#chat_say_party"); break;
-#else
-		case MM_SAY_PARTY:	pszPrompt = g_pVGuiLocalize->Find("#chat_party"); break;
-#endif
 	}
 
 	if ( pszPrompt )
@@ -1258,11 +1235,7 @@ void CBaseHudChat::StartMessageMode( int iMessageModeType )
 
 	//Place the mouse cursor near the text so people notice it.
 	int x, y, w, h;
-#ifdef BDSBASE
 	GetBounds(x, y, w, h);
-#else
-	GetChatHistory()->GetBounds( x, y, w, h );
-#endif
 
 	vgui::input()->SetCursorPos( x + ( w/2), y + (h/2) );
 
@@ -1309,7 +1282,6 @@ void CBaseHudChat::StopMessageMode( void )
 #endif
 }
 
-#ifdef BDSBASE
 //-----------------------------------------------------------------------------
 // Purpose: Allows to close the chat after clicking on text.
 //-----------------------------------------------------------------------------
@@ -1323,7 +1295,6 @@ void CBaseHudChat::OnKeyCodeTyped(vgui::KeyCode code)
 
 	BaseClass::OnKeyCodeTyped(code);
 }
-#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -1444,12 +1415,8 @@ Color CBaseHudChat::GetClientColor( int clientIndex )
 	}
 	else if( g_PR )
 	{
-#ifdef BDSBASE
 #ifdef HL2MP
 		return g_ColorYellow;
-#else
-		return g_ColorGrey;
-#endif
 #else
 		return g_ColorGrey;
 #endif
@@ -1636,10 +1603,8 @@ void CBaseHudChatLine::Colorize( int alpha )
 			InsertColorChange( color );
 			InsertString( wText );
 
-#ifdef BDSBASE
 			// TERROR: color console echo
 			ConColorMsg(color, "%ls", wText);
-#endif
 
 			if ( pChat && pChat->GetChatHistory() )
 			{	
@@ -1656,10 +1621,8 @@ void CBaseHudChatLine::Colorize( int alpha )
 		}
 	}
 
-#ifdef BDSBASE
 	// TERROR: color console echo
 	Msg("\n");
-#endif
 
 	InvalidateLayout( true );
 }
@@ -1942,7 +1905,6 @@ void CBaseHudChat::FireGameEvent( IGameEvent *event )
 #endif
 }
 
-#ifdef BDSBASE
 CON_COMMAND(cl_clearchathistory, "Clears the chat history")
 {
 	CBaseHudChat* pChat = (CBaseHudChat*)gHUD.FindElement("CHudChat");
@@ -1951,4 +1913,3 @@ CON_COMMAND(cl_clearchathistory, "Clears the chat history")
 		pChat->GetChatHistory()->SetText("");
 	}
 }
-#endif

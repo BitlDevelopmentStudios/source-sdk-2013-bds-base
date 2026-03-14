@@ -60,11 +60,7 @@ C_ObjectSentrygun::C_ObjectSentrygun()
 	m_nShieldLevel = SHIELD_NONE;
 	m_nOldShieldLevel = SHIELD_NONE;
 	m_hLaserBeamEffect = NULL;
-#ifdef BDSBASE
 	m_hShieldModel = NULL;
-#else
-	m_pTempShield = NULL;
-#endif
 	m_bNearMiss = false;
 	m_flNextNearMissCheck = 0.f;
 
@@ -316,11 +312,7 @@ void C_ObjectSentrygun::SetDormant( bool bDormant )
 	if ( IsDormant() && !bDormant )
 	{
 		// Make sure our shield is where we are. We may have moved since last seen.
-#ifdef BDSBASE
 		if (m_hShieldModel)
-#else
-		if (m_pTempShield)
-#endif
 		{
 			m_bRecreateShield = true;
 			m_bRecreateLaserBeam = true;
@@ -337,7 +329,6 @@ void C_ObjectSentrygun::CreateShield( void )
 {
 	DestroyShield();
 
-#ifdef BDSBASE
 	m_hShieldModel = C_SentrygunShield::Create("models/buildables/sentry_shield.mdl");
 	if (m_hShieldModel)
 	{
@@ -345,16 +336,6 @@ void C_ObjectSentrygun::CreateShield( void )
 		m_hShieldModel->ChangeTeam(GetTeamNumber());
 		m_hShieldModel->m_nSkin = (GetTeamNumber() == TF_TEAM_RED) ? 0 : 1;
 	}
-#else
-	model_t* pModel = (model_t*)engine->LoadModel("models/buildables/sentry_shield.mdl");
-	m_pTempShield = tempents->SpawnTempModel(pModel, GetAbsOrigin(), GetAbsAngles(), Vector(0, 0, 0), 1, FTENT_NEVERDIE);
-	if (m_pTempShield)
-	{
-		m_pTempShield->ChangeTeam(GetTeamNumber());
-		m_pTempShield->m_nSkin = (GetTeamNumber() == TF_TEAM_RED) ? 0 : 1;
-		//m_pTempShield->m_nRenderFX = kRenderFxDistort;
-	}
-#endif
 
 	m_hShieldEffect = ParticleProp()->Create( "turret_shield", PATTACH_ABSORIGIN_FOLLOW, 0, Vector( 0,0,30) );
 	if ( !m_hShieldEffect )
@@ -374,21 +355,11 @@ void C_ObjectSentrygun::CreateShield( void )
 //-----------------------------------------------------------------------------
 void C_ObjectSentrygun::DestroyShield( void )
 {
-#ifdef BDSBASE
 	if (m_hShieldModel)
 	{
 		m_hShieldModel->StartFadeOut(1.0f);
 		m_hShieldModel = NULL;
 	}
-#else
-	if (m_pTempShield)
-	{
-		m_pTempShield->flags = FTENT_FADEOUT;
-		m_pTempShield->die = gpGlobals->curtime;
-		m_pTempShield->fadeSpeed = 1.0f;
-		m_pTempShield = NULL;
-	}
-#endif
 
 	if ( m_hShieldEffect )
 	{
@@ -784,7 +755,6 @@ const char* C_ObjectSentrygun::GetStatusName() const
 	return "#TF_Object_Sentry";
 }
 
-#ifdef BDSBASE
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
@@ -831,6 +801,5 @@ void C_SentrygunShield::StartFadeOut(float flDuration)
 	m_flFadeOutEndTime = gpGlobals->curtime + flDuration;
 	SetNextClientThink(gpGlobals->curtime);
 }
-#endif
 
 

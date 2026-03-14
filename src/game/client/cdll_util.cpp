@@ -33,9 +33,7 @@
 #include "tier0/memdbgon.h"
 																						
 ConVar localplayer_visionflags( "localplayer_visionflags", "0", FCVAR_DEVELOPMENTONLY );
-#ifdef BDSBASE
 ConVar level_visits("level_visits", "0", FCVAR_USERINFO, "The number of times the player has visited the current map");
-#endif
 																						
 //-----------------------------------------------------------------------------
 // ConVars
@@ -1246,11 +1244,7 @@ void UTIL_IncrementMapKey( const char *pszCustomKey )
 			KeyValues *pNewKey = new KeyValues( mapname );
 			if ( pNewKey )
 			{
-#ifdef BDSBASE
 				pNewKey->SetInt(pszCustomKey, iCount);
-#else
-				pNewKey->SetString(pszCustomKey, "1");
-#endif
 				kvMapLoadFile->AddSubKey( pNewKey );
 			}
 		}
@@ -1267,9 +1261,7 @@ void UTIL_IncrementMapKey( const char *pszCustomKey )
 		kvMapLoadFile->deleteThis();
 	}
 
-#ifdef BDSBASE
 	level_visits.SetValue(iCount);
-#endif
 
 	if ( IsX360() )
 	{

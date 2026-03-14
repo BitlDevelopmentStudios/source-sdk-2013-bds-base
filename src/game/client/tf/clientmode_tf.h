@@ -158,9 +158,6 @@ private:
 	bool					m_bRestrictInfoPanel;
 
 	void					AskFavoriteOrBlacklist() const;
-#ifndef BDSBASE
-	void					RemoveFilesInPath(const char* pszPath) const;
-#endif
 
 #if defined( _X360 )
 	CTFClientScoreBoardDialog	*m_pScoreboard;

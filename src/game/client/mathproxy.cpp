@@ -60,11 +60,7 @@ void CAddProxy::OnBind( void *pC_BaseEntity )
 		break;
 
 	case MATERIAL_VAR_TYPE_FLOAT:
-#ifdef BDSBASE
 		SetFloatResult(GetSrc1Float() + GetSrc2Float());
-#else
-		SetFloatResult( m_pSrc1->GetFloatValue() + m_pSrc2->GetFloatValue() );
-#endif
 		break;
 
 	case MATERIAL_VAR_TYPE_INT:
@@ -121,11 +117,7 @@ void CSubtractProxy::OnBind( void *pC_BaseEntity )
 		break;
 
 	case MATERIAL_VAR_TYPE_FLOAT:
-#ifdef BDSBASE
 		SetFloatResult(GetSrc1Float() - GetSrc2Float());
-#else
-		SetFloatResult(m_pSrc1->GetFloatValue() - m_pSrc2->GetFloatValue());
-#endif
 		break;
 
 	case MATERIAL_VAR_TYPE_INT:
@@ -182,11 +174,7 @@ void CMultiplyProxy::OnBind( void *pC_BaseEntity )
 		break;
 
 	case MATERIAL_VAR_TYPE_FLOAT:
-#ifdef BDSBASE
 		SetFloatResult(GetSrc1Float() * GetSrc2Float());
-#else
-		SetFloatResult(m_pSrc1->GetFloatValue() * m_pSrc2->GetFloatValue());
-#endif
 		break;
 
 	case MATERIAL_VAR_TYPE_INT:
@@ -244,7 +232,6 @@ void CDivideProxy::OnBind( void *pC_BaseEntity )
 		break;
 
 	case MATERIAL_VAR_TYPE_FLOAT:
-#ifdef BDSBASE
 		if (GetSrc2Float() != 0)
 		{
 			SetFloatResult(GetSrc1Float() / GetSrc2Float());
@@ -253,16 +240,6 @@ void CDivideProxy::OnBind( void *pC_BaseEntity )
 		{
 			SetFloatResult(GetSrc1Float());
 		}
-#else
-		if (m_pSrc2->GetFloatValue() != 0)
-		{
-			SetFloatResult(m_pSrc1->GetFloatValue() / m_pSrc2->GetFloatValue());
-		}
-		else
-		{
-			SetFloatResult(m_pSrc1->GetFloatValue());
-		}
-#endif
 		break;
 
 	case MATERIAL_VAR_TYPE_INT:
@@ -351,11 +328,7 @@ void CClampProxy::OnBind( void *pC_BaseEntity )
 
 	case MATERIAL_VAR_TYPE_FLOAT:
 		{
-#ifdef BDSBASE
 			float src = GetSrc1Float();
-#else
-			float src = m_pSrc1->GetFloatValue();
-#endif
 			
 			if (src < flMin)
 				src = flMin;
@@ -481,11 +454,7 @@ void CEqualsProxy::OnBind( void *pC_BaseEntity )
 		break;
 
 	case MATERIAL_VAR_TYPE_FLOAT:
-#ifdef BDSBASE
 		SetFloatResult(GetSrc1Float());
-#else
-		SetFloatResult(m_pSrc1->GetFloatValue());
-#endif
 		break;
 
 	case MATERIAL_VAR_TYPE_INT:
@@ -537,11 +506,7 @@ void CFracProxy::OnBind( void *pC_BaseEntity )
 
 	case MATERIAL_VAR_TYPE_FLOAT:
 		{
-#ifdef BDSBASE
 			float a = GetSrc1Float();
-#else
-			float a = m_pSrc1->GetFloatValue();
-#endif
 			a -= ( int )a;
 			SetFloatResult( a );
 		}
@@ -595,11 +560,7 @@ void CIntProxy::OnBind( void *pC_BaseEntity )
 
 	case MATERIAL_VAR_TYPE_FLOAT:
 		{
-#ifdef BDSBASE
 			float a = GetSrc1Float();
-#else
-			float a = m_pSrc1->GetFloatValue();
-#endif
 			a = ( float )( int )a;
 			SetFloatResult( a );
 		}
@@ -938,11 +899,7 @@ void CLessOrEqualProxy::OnBind( void *pC_BaseEntity )
 	Assert( m_pSrc1 && m_pSrc2 && m_pLessVar && m_pGreaterVar && m_pResult );
 
 	IMaterialVar *pSourceVar;
-#ifdef BDSBASE
 	if (GetSrc1Float() <= GetSrc2Float())
-#else
-	if (m_pSrc1->GetFloatValue() <= m_pSrc2->GetFloatValue())
-#endif
 	{
 		pSourceVar = m_pLessVar;
 	}
@@ -1033,11 +990,7 @@ void CWrapMinMaxProxy::OnBind( void *pC_BaseEntity )
 	}
 	else
 	{
-#ifdef BDSBASE
 		float flResult = (GetSrc1Float() - m_flMinVal.GetFloat()) / (m_flMaxVal.GetFloat() - m_flMinVal.GetFloat());
-#else
-		float flResult = ( m_pSrc1->GetFloatValue() - m_flMinVal.GetFloat() ) / ( m_flMaxVal.GetFloat() - m_flMinVal.GetFloat() );
-#endif
 
 		if ( flResult >= 0.0f )
 		{
@@ -1110,7 +1063,6 @@ void CSelectFirstIfNonZeroProxy::OnBind( void *pC_BaseEntity )
 		break;
 
 	case MATERIAL_VAR_TYPE_FLOAT:
-#ifdef BDSBASE
 		if (GetSrc1Float())
 		{
 			SetFloatResult(GetSrc1Float());
@@ -1119,16 +1071,6 @@ void CSelectFirstIfNonZeroProxy::OnBind( void *pC_BaseEntity )
 		{
 			SetFloatResult(GetSrc2Float());
 		}
-#else
-		if ( m_pSrc1->GetFloatValue() )
-		{
-			SetFloatResult( m_pSrc1->GetFloatValue() );
-		}
-		else
-		{
-			SetFloatResult( m_pSrc2->GetFloatValue() );
-		}
-#endif
 		break;
 
 	case MATERIAL_VAR_TYPE_INT:

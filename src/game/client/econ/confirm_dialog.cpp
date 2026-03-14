@@ -795,9 +795,6 @@ CTFReviveDialog::CTFReviveDialog( const char *pTitle, const char *pText, const c
 	m_pTargetHealth->HideHealthBonusImage();
 	
 	vgui::ivgui()->AddTickSignal( GetVPanel(), 50 );
-#ifndef BDSBASE
-	OnTick();
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -815,7 +812,6 @@ void CTFReviveDialog::OnTick()
 {
 	BaseClass::OnTick();
 
-#ifdef BDSBASE
 	if (!m_hEntity)
 	{
 		FinishUp();
@@ -827,21 +823,6 @@ void CTFReviveDialog::OnTick()
 
 	float flMaxHealth = m_hEntity->GetMaxHealth();
 	m_pTargetHealth->SetHealth(m_hEntity->GetHealth(), flMaxHealth, flMaxHealth);
-#else
-	if (!m_pTargetHealth)
-		return;
-
-	if (!m_hEntity)
-		return;
-
-	float flHealth = m_hEntity->GetHealth();
-	if (flHealth != m_flPrevHealth)
-	{
-		float flMaxHealth = m_hEntity->GetMaxHealth();
-		m_pTargetHealth->SetHealth(flHealth, flMaxHealth, flMaxHealth);
-		m_flPrevHealth = flHealth;
-	}
-#endif
 }
 
 //-----------------------------------------------------------------------------

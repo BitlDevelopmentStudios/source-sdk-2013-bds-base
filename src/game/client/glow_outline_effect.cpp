@@ -319,11 +319,7 @@ void CGlowObjectManager::GlowObjectDefinition_t::DrawModel()
 
 		while ( pAttachment != NULL )
 		{
-#ifdef BDSBASE
 			if (!g_GlowObjectManager.HasGlowEffect(pAttachment) && pAttachment->ShouldDraw() && pAttachment->CanGlow())
-#else
-			if ( !g_GlowObjectManager.HasGlowEffect( pAttachment ) && pAttachment->ShouldDraw() )
-#endif
 			{
 				pAttachment->DrawModel( STUDIO_RENDER );
 			}

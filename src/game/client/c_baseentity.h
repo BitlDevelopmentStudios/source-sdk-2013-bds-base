@@ -35,9 +35,7 @@
 #include "particle_property.h"
 #include "toolframework/itoolentity.h"
 #include "tier0/threadtools.h"
-#ifdef BDSBASE
 #include "soundstartparams.h"
-#endif
 
 class C_Team;
 class IPhysicsObject;
@@ -1452,11 +1450,9 @@ public:
 
 	void TrackAngRotation( bool bTrack );
 
-#ifdef BDSBASE
 #ifdef GLOWS_ENABLE
 	virtual bool CanGlow() const { return true; }
 #endif // GLOWS_ENABLE
-#endif
 
 private:
 	friend void OnRenderStart();

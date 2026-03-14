@@ -26,9 +26,7 @@ public:
 
 	virtual void ClientThink( void );
 	virtual void OnDataChanged( DataUpdateType_t type );
-#ifdef BDSBASE
 	virtual bool ValidateEntityAttachedToPlayer(bool& bShouldRetry);
-#endif
 
 	virtual bool	IsHostileUpgrade( void ) { return true; }
 

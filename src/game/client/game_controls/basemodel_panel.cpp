@@ -12,7 +12,9 @@
 #include "matsys_controls/manipulator.h"
 #include "bone_setup.h"
 
-#ifdef BDSBASE
+#ifndef QUIVER_DLL
+ConVar	cl_legacymodelpanellights("cl_legacymodelpanellights", "0", FCVAR_ARCHIVE);
+#else
 ConVar	cl_legacymodelpanellights("cl_legacymodelpanellights", "1", FCVAR_ARCHIVE);
 #endif
 
@@ -105,7 +107,6 @@ void CBaseModelPanel::ParseModelResInfo( KeyValues *inResourceData )
 	m_angPlayer = m_BMPResData.m_angModelPoseRot;
 	m_vecPlayerPos = m_BMPResData.m_vecOriginOffset;
 
-#ifdef BDSBASE
 	// a hacky code-based reimplementation of the 2007 TF2 classmenu lighting.
 	// this allows us to enable/disable the lighting settings per panel without modifying the res files (unless required).
 	// settings put together by DistantPeak. 
@@ -126,7 +127,6 @@ void CBaseModelPanel::ParseModelResInfo( KeyValues *inResourceData )
 
 		ParseLightsFromKV(pLightSettings);
 	}
-#endif
 
 	for ( KeyValues *pData = inResourceData->GetFirstSubKey(); pData != NULL; pData = pData->GetNextKey() )
 	{

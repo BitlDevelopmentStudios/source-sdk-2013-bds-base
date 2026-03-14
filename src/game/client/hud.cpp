@@ -534,9 +534,7 @@ void CHud::LevelInit( void )
 		group->m_pLockingElements.Purge();
 	}
 
-#ifdef BDSBASE
 	RefreshHudTextures();
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -805,11 +803,7 @@ CHudTexture *CHud::GetIcon( const char *szIcon )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-#ifdef BDSBASE
 void CHud::RefreshHudTextures(const char* customKillIconFile /* = "\0" */)
-#else
-void CHud::RefreshHudTextures()
-#endif
 {
 	if ( !m_bHudTexturesLoaded )
 	{
@@ -819,7 +813,6 @@ void CHud::RefreshHudTextures()
 
 	CUtlDict< CHudTexture *, int >	textureList;
 
-#ifdef BDSBASE
 	// loading custom kill icons, presumably packed into the map and because of an input to the gamerules entity
 	if (FStrEq(customKillIconFile, "") == false)
 	{
@@ -831,7 +824,6 @@ void CHud::RefreshHudTextures()
 			AddSearchableHudIconToList(*tex);
 		}
 	}
-#endif
 
 	// check to see if we have sprites for this res; if not, step down
 	LoadHudTextures( textureList, "scripts/hud_textures", NULL );
@@ -993,11 +985,7 @@ bool CHud::IsHidden( int iHudFlags )
 		return true;
 
 	// Local player dead?
-#ifdef BDSBASE
 	if ((iHudFlags & HIDEHUD_PLAYERDEAD) && !pPlayer->IsAlive())
-#else
-	if ((iHudFlags & HIDEHUD_PLAYERDEAD) && (pPlayer->GetHealth() <= 0 && !pPlayer->IsAlive()))
-#endif
 		return true;
 
 	// Need the HEV suit ( HL2 )

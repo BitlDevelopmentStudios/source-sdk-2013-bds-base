@@ -190,18 +190,9 @@ void CMoveHelperClient::ProcessImpacts( void )
 			entity->PhysicsImpact( m_pHost, m_TouchList[i].trace );
 	}
 
-	// misyl: Debug
-#ifndef BDSBASE
-	if ( vOldLocalVel != vOldAbsVel )
-	{
-		Msg( "%d\n", gpGlobals->tickcount );
-		Msg( "vOldLocalVel: %f %f %f\n", vOldLocalVel.x, vOldLocalVel.y, vOldLocalVel.z );
-		Msg( "vOldAbsVel: %f %f %f\n", vOldAbsVel.x, vOldAbsVel.y, vOldAbsVel.z );
-	}
-#endif
-		// Restore the velocity
-		m_pHost->SetAbsVelocity( vOldAbsVel );
-		//m_pHost->SetLocalVelocity( vOldLocalVel );
+	// Restore the velocity
+	m_pHost->SetAbsVelocity( vOldAbsVel );
+	//m_pHost->SetLocalVelocity( vOldLocalVel );
 
 	if ( vOldLocalVel != vOldAbsVel )
 	{

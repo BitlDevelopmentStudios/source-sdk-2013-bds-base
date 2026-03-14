@@ -11,9 +11,7 @@
 #include "materialsystem/itexture.h"
 #include "materialsystem/imaterialsystem.h"
 #include "functionproxy.h"
-#ifdef BDSBASE
 #include "proxyentity.h"
-#endif
 #include "toolframework_client.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -251,7 +249,6 @@ void CPlayerPositionProxy::OnBind( void *pC_BaseEntity )
 
 EXPOSE_INTERFACE( CPlayerPositionProxy, IMaterialProxy, "PlayerPosition" IMATERIAL_PROXY_INTERFACE_VERSION );
 
-#ifdef BDSBASE
 //-----------------------------------------------------------------------------
 // Returns the entity's forward, right, and/or up vectors.
 //-----------------------------------------------------------------------------
@@ -342,7 +339,6 @@ protected:
 };
 
 EXPOSE_INTERFACE(CEntityVectorsProxy, IMaterialProxy, "EntityVectors" IMATERIAL_PROXY_INTERFACE_VERSION);
-#endif
 
 //-----------------------------------------------------------------------------
 // Returns the entity speed

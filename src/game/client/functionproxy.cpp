@@ -14,7 +14,6 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-#ifdef BDSBASE
 // Get the named material variable and the vector component, if applicable.
 static bool GetMaterialVariable(IMaterial* pMaterial, const char* pVarName,
 	IMaterialVar*& pMaterialVar, int& vecComp)
@@ -59,7 +58,6 @@ static float GetMaterialFloat(const IMaterialVar& material, int vecComp)
 	material.GetVecValue(v, iVecSize);
 	return v[vecComp];
 }
-#endif
 
 //-----------------------------------------------------------------------------
 // Helper class to deal with floating point inputs
@@ -83,35 +81,7 @@ bool CFloatInput::Init( IMaterial *pMaterial, KeyValues *pKeyValues, const char 
 				return true;
 			}
 
-#ifdef BDSBASE
 			return GetMaterialVariable(pMaterial, pVarName, m_pFloatVar, m_FloatVecComp);
-#else
-			// Look for array specification...
-			char pTemp[256];
-			if (strchr(pVarName, '['))
-			{		 
-				// strip off the array...
-				Q_strncpy( pTemp, pVarName, 256 );
-				char *pArray = strchr( pTemp, '[' );
-				*pArray++ = 0;
-
-				char* pIEnd;
-				m_FloatVecComp = strtol( pArray, &pIEnd, 10 );
-
-				// Use the version without the array...
-				pVarName = pTemp;
-			}
-			else
-			{
-				m_FloatVecComp = -1;
-			}
-
-			bool bFoundVar;
-			m_pFloatVar = pMaterial->FindVar( pVarName, &bFoundVar, true );
-			if (!bFoundVar)
-				return false;
-
-#endif
 		}
 		else
 		{
@@ -161,44 +131,11 @@ CResultProxy::~CResultProxy()
 
 bool CResultProxy::Init( IMaterial *pMaterial, KeyValues *pKeyValues )
 {
-#ifdef BDSBASE
 	char const* pVarName = pKeyValues->GetString("resultVar");
 	if (!pVarName)
 		return false;
 
 	return GetMaterialVariable(pMaterial, pVarName, m_pResult, m_ResultVecComp);
-#else
-	char const* pResult = pKeyValues->GetString( "resultVar" );
-	if( !pResult )
-		return false;
-
-	// Look for array specification...
-	char pTemp[256];
-	if (strchr(pResult, '['))
-	{		 
-		// strip off the array...
-		Q_strncpy( pTemp, pResult, 256 );
-		char *pArray = strchr( pTemp, '[' );
-		*pArray++ = 0;
-
-		char* pIEnd;
-		m_ResultVecComp = strtol( pArray, &pIEnd, 10 );
-
-		// Use the version without the array...
-		pResult = pTemp;
-	}
-	else
-	{
-		m_ResultVecComp = -1;
-	}
-
-	bool foundVar;
-	m_pResult = pMaterial->FindVar( pResult, &foundVar, true );
-	if( !foundVar )
-		return false;
-
-	return true;
-#endif
 }
 
 
@@ -266,12 +203,8 @@ bool CFunctionProxy::Init( IMaterial *pMaterial, KeyValues *pKeyValues )
 	if( !pSrcVar1 )
 		return false;
 
-#ifdef BDSBASE
 	bool foundVar = GetMaterialVariable(pMaterial, pSrcVar1, m_pSrc1, m_Src1VecComp);
-#else
-	bool foundVar;
-	m_pSrc1 = pMaterial->FindVar( pSrcVar1, &foundVar, true );
-#endif
+
 	if( !foundVar )
 		return false;
 
@@ -279,11 +212,7 @@ bool CFunctionProxy::Init( IMaterial *pMaterial, KeyValues *pKeyValues )
 	char const* pSrcVar2 = pKeyValues->GetString( "srcVar2" );
 	if( pSrcVar2 && (*pSrcVar2) )
 	{
-#ifdef BDSBASE
 		foundVar = GetMaterialVariable(pMaterial, pSrcVar2, m_pSrc2, m_Src2VecComp);
-#else
-		m_pSrc2 = pMaterial->FindVar( pSrcVar2, &foundVar, true );
-#endif
 		if( !foundVar )
 			return false;
 	}
@@ -325,7 +254,6 @@ void CFunctionProxy::ComputeResultType( MaterialVarType_t& resultType, int& vecS
 	}
 }
 
-#ifdef BDSBASE
 float CFunctionProxy::GetSrc1Float() const
 {
 	return GetMaterialFloat(*m_pSrc1, m_Src1VecComp);
@@ -335,5 +263,4 @@ float CFunctionProxy::GetSrc2Float() const
 {
 	return GetMaterialFloat(*m_pSrc2, m_Src2VecComp);
 }
-#endif
 

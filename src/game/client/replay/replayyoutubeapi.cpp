@@ -476,7 +476,6 @@ public:
 		}
 		else
 		{
-#ifdef BDSBASE
 #if defined(TF_CLIENT_DLL)
 			//assume tf2
 			*ppShortGameName = "TF2";
@@ -485,11 +484,6 @@ public:
 			//assume cstrike
 			*ppShortGameName = "CSS";
 			*ppFullGameName = "Counter-Strike: Source";
-#else
-			AssertMsg(0, "Unknown game");
-			*ppShortGameName = "";
-			*ppFullGameName = "";
-#endif
 #else
 			AssertMsg(0, "Unknown game");
 			*ppShortGameName = "";

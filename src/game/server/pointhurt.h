@@ -28,9 +28,7 @@ public:
 	string_t	m_strTarget;
 	EHANDLE		m_pActivator;
 
-#ifdef BDSBASE
 #ifdef TF_DLL
 	string_t m_szKillIcon;
 #endif // TF_DLL
-#endif
 };

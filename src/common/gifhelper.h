@@ -4,7 +4,6 @@
 #pragma once
 #endif
 
-#ifdef BDSBASE
 typedef struct GifFileType GifFileType;
 typedef unsigned char GifByteType;
 
@@ -40,6 +39,5 @@ private:
 	int m_iSelectedFrame;
 	double m_dIterateTime;
 };
-#endif
 
 #endif //GIFHELPER_H

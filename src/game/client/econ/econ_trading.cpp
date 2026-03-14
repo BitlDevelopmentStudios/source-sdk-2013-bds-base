@@ -37,11 +37,7 @@
 
 const char *g_FriendRelationship[] =
 {
-#ifdef BDSBASE
 	"none",
-#else
-	"none"
-#endif
 	"blocked",
 	"request_recipient",
 	"friend",

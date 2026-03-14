@@ -3147,22 +3147,10 @@ void CItemModelPanel::UpdatePanels( void )
 			int iRGB0 = m_ItemData.GetModifiedRGBValue( false ),
 				iRGB1 = m_ItemData.GetModifiedRGBValue( true );
 
-#ifdef BDSBASE
 			if (!bIsEconTool)
 			{
 				DrawPaintImage(iRGB0, iRGB1);
 			}
-#else
-			if ( !bIsEconTool && (iRGB0 != 0 || iRGB1 != 0))
-			{
-				m_pPaintIcon->SetVisible( true );
-				m_pPaintIcon->m_colPaintColors.AddToTail( Color( clamp( (iRGB0 & 0xFF0000) >> 16, 0, 255 ), clamp( (iRGB0 & 0xFF00) >> 8, 0, 255 ), clamp( (iRGB0 & 0xFF), 0, 255 ), 255 ) );
-				if ( iRGB0 != iRGB1 )
-				{
-					m_pPaintIcon->m_colPaintColors.AddToTail( Color( clamp( (iRGB1 & 0xFF0000) >> 16, 0, 255 ), clamp( (iRGB1 & 0xFF00) >> 8, 0, 255 ), clamp( (iRGB1 & 0xFF), 0, 255 ), 255 ) );
-				}
-			}
-#endif
 		}
 	}
 
@@ -3416,7 +3404,6 @@ void CItemModelPanel::SetModelIsHidden( bool bHideModel )
 	}
 }
 
-#ifdef BDSBASE
 void CItemModelPanel::DrawPaintImage(int iRGB0, int iRGB1)
 {
 	if (iRGB0 != 0 || iRGB1 != 0)
@@ -3431,21 +3418,16 @@ void CItemModelPanel::DrawPaintImage(int iRGB0, int iRGB1)
 }
 
 static CSchemaAttributeDefHandle pAttrDef_SpellColor("SPELL: set item tint RGB");
-#endif
 
 void CItemModelPanel::OnTick()
 {
 	bool bStillWorking = LoadData();
-#ifdef BDSBASE
+
 	if (m_pContainedItemPanel && bLoadingData)
-#else
-	if ( m_pContainedItemPanel )
-#endif
 	{
 		bStillWorking |= m_pContainedItemPanel->LoadData();
 	}
 
-#ifdef BDSBASE
 	// If we're done working, lets check if the item is spelled and can change colors!
 	// If it is not, lets stop ticking the panel and act like normal.
 	if (!bStillWorking)
@@ -3471,13 +3453,6 @@ void CItemModelPanel::OnTick()
 			}
 		}
 	}
-#else
-	// If we're done working, we dont need to tick anymore
-	if ( !bStillWorking )
-	{
-		LoadDataCompleted();
-	}
-#endif
 
 	BaseClass::OnTick();
 }
@@ -3585,11 +3560,7 @@ bool CItemModelPanel::LoadData()
 	return bStillWorking;
 }
 
-#ifdef BDSBASE
 void CItemModelPanel::RemovePanelTick()
-#else
-void CItemModelPanel::LoadDataCompleted()
-#endif
 {
 	vgui::ivgui()->RemoveTickSignal( GetVPanel() );
 }

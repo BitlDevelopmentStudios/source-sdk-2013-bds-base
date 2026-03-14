@@ -1603,7 +1603,6 @@ void C_BaseAnimating::BuildTransformations( CStudioHdr *hdr, Vector *pos, Quater
 		}
 	}
 	
-#ifdef BDSBASE
 	if (m_pRagdoll)
 	{
 		C_BasePlayer* pPlayer = C_BasePlayer::GetLocalPlayer();
@@ -1623,7 +1622,6 @@ void C_BaseAnimating::BuildTransformations( CStudioHdr *hdr, Vector *pos, Quater
 			}
 		}
 	}
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -1839,11 +1837,7 @@ void C_BaseAnimating::MaintainSequenceTransitions( IBoneSetup &boneSetup, float 
 	if ( !boneSetup.GetStudioHdr() )
 		return;
 
-#ifdef BDSBASE
 	if (prediction->InPrediction() || IsAboutToRagdoll())
-#else
-	if ( prediction->InPrediction() )
-#endif
 	{
 		m_nPrevNewSequenceParity = m_nNewSequenceParity;
 		return;
@@ -2345,11 +2339,7 @@ CBoneCache *C_BaseAnimating::GetBoneCache( CStudioHdr *pStudioHdr )
 	CBoneCache *pcache = Studio_GetBoneCache( m_hitboxBoneCacheHandle );
 	if ( pcache )
 	{
-#ifdef BDSBASE
 		if (pcache->IsValid(gpGlobals->curtime, 0.0) && pcache->m_timeValid <= gpGlobals->curtime)
-#else
-		if ( pcache->IsValid( gpGlobals->curtime, 0.0 ) )
-#endif
 		{
 			// in memory and still valid, use it!
 			return pcache;

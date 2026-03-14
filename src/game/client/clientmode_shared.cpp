@@ -78,17 +78,14 @@ class CHudVote;
 
 static vgui::HContext s_hVGuiContext = DEFAULT_VGUI_CONTEXT;
 
-#ifdef BDSBASE
 #if !defined( _X360 ) && !defined( NO_STEAM )
 void OnSteamToastConVarChanged(IConVar* pCVar, const char* pszOldValue, float flOldValue);
-#endif
 #endif
 
 ConVar cl_drawhud( "cl_drawhud", "1", FCVAR_CHEAT, "Enable the rendering of the hud" );
 ConVar hud_takesshots( "hud_takesshots", "0", FCVAR_CLIENTDLL | FCVAR_ARCHIVE, "Auto-save a scoreboard screenshot at the end of a map." );
 ConVar hud_freezecamhide( "hud_freezecamhide", "0", FCVAR_CLIENTDLL | FCVAR_ARCHIVE, "Hide the HUD during freeze-cam" );
 ConVar cl_show_num_particle_systems( "cl_show_num_particle_systems", "0", FCVAR_CLIENTDLL, "Display the number of active particle systems." );
-#ifdef BDSBASE
 #if !defined( _X360 ) && !defined( NO_STEAM )
 ConVar cl_steam_overlay_toast_position("cl_steam_overlay_toast_position", "0", FCVAR_ARCHIVE, "Which corner the Steam overlay notification toast should display itself in. 0 = k_EPositionTopLeft, 1 = k_EPositionTopRight, 2 = k_EPositionBottomLeft, 3 = k_EPositionBottomRight", OnSteamToastConVarChanged);
 ConVar cl_steam_overlay_toast_inset_horizontal("cl_steam_overlay_toast_inset_horizontal", "0", FCVAR_ARCHIVE, "Steam overlay notification toast horizontal inset", true, 0.0f, true, 1.0f, OnSteamToastConVarChanged);
@@ -96,7 +93,6 @@ ConVar cl_steam_overlay_toast_inset_vertical("cl_steam_overlay_toast_inset_verti
 #endif
 
 ConVar cl_delete_temp_files("cl_delete_temp_files", "1", FCVAR_CLIENTDLL | FCVAR_ARCHIVE, "Delete custom player sprays and other temp files during shutdown");
-#endif
 
 extern ConVar v_viewmodel_fov;
 extern ConVar voice_modenable;
@@ -105,7 +101,6 @@ extern ConVar cl_enable_text_chat;
 extern bool IsInCommentaryMode( void );
 extern const char* GetWearLocalizationString( float flWear );
 
-#ifdef BDSBASE
 #if !defined( _X360 ) && !defined( NO_STEAM )
 void SetSteamOverlayToastPosition(void)
 {
@@ -129,7 +124,6 @@ void OnSteamToastConVarChanged(IConVar* pCVar, const char* pszOldValue, float fl
 {
 	SetSteamOverlayToastPosition();
 }
-#endif
 #endif
 
 CON_COMMAND( cl_reload_localization_files, "Reloads all localization files" )
@@ -451,14 +445,12 @@ void ClientModeShared::VGui_Shutdown()
 //-----------------------------------------------------------------------------
 void ClientModeShared::Shutdown()
 {
-#ifdef BDSBASE
 	if (cl_delete_temp_files.GetBool())
 	{
 		RemoveFilesInPath("materials/temp");
 		RemoveFilesInPath("download/user_custom");
 		RemoveFilesInPath("sound/temp");
 	}
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -473,7 +465,6 @@ bool ClientModeShared::CreateMove( float flInputSampleTime, CUserCmd *cmd )
 	if(!pPlayer)
 		return true;
 
-#ifdef BDSBASE
 	// for whatever reason the original implementation of #824 simulates a keybind. 
 	// In my implementation, m_bTyping will be a part of the base player code, which will be handled
 	// in the TF player classes.
@@ -481,7 +472,6 @@ bool ClientModeShared::CreateMove( float flInputSampleTime, CUserCmd *cmd )
 		pPlayer->m_bTyping = true;
 	else
 		pPlayer->m_bTyping = false;
-#endif
 
 	// Let the player at it
 	return pPlayer->CreateMove( flInputSampleTime, cmd );
@@ -896,7 +886,6 @@ void ClientModeShared::StartMessageMode( int iMessageModeType )
 		return;
 	}
 
-#ifdef BDSBASE
 #if defined( TF_CLIENT_DLL )
 	if (iMessageModeType == MM_SAY || iMessageModeType == MM_SAY_TEAM)
 	{
@@ -920,28 +909,6 @@ void ClientModeShared::StartMessageMode( int iMessageModeType )
 		}
 	}
 #endif // TF_CLIENT_DLL
-#else
-#if defined( TF_CLIENT_DLL )
-	bool bSuspensionInMatch = GTFGCClientSystem() && GTFGCClientSystem()->BHaveChatSuspensionInCurrentMatch();
-	if (!cl_enable_text_chat.GetBool() || bSuspensionInMatch)
-	{
-		CBaseHudChat* pHUDChat = (CBaseHudChat*)GET_HUDELEMENT(CHudChat);
-		if (pHUDChat)
-		{
-			const char* pszReason = "#TF_Chat_Disabled";
-			if (bSuspensionInMatch)
-			{
-				pszReason = "#TF_Chat_Unavailable";
-			}
-
-			char szLocalized[100];
-			g_pVGuiLocalize->ConvertUnicodeToANSI(g_pVGuiLocalize->Find(pszReason), szLocalized, sizeof(szLocalized));
-			pHUDChat->ChatPrintf(0, CHAT_FILTER_NONE, "%s ", szLocalized);
-		}
-		return;
-	}
-#endif // TF_CLIENT_DLL
-#endif
 
 	if ( m_pChatElement )
 	{
@@ -1657,7 +1624,6 @@ void ClientModeShared::DeactivateInGameVGuiContext()
 	vgui::ivgui()->ActivateContext( DEFAULT_VGUI_CONTEXT );
 }
 
-#ifdef BDSBASE
 //----------------------------------------------------------------------------
 void ClientModeShared::RemoveFilesInPath(const char* pszPath) const
 {
@@ -1686,4 +1652,3 @@ void ClientModeShared::RemoveFilesInPath(const char* pszPath) const
 
 	g_pFullFileSystem->FindClose(hFind);
 }
-#endif
