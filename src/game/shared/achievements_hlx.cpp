@@ -130,7 +130,7 @@ protected:
 			CBasePlayer* pPlayer = UTIL_GetLocalPlayer();
 #endif //BDSBASE
 			// check if player was most recent thrower, but the victim was the original thrower
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 			if (pThrower->IsPlayer() && (pOriginalThrower == pVictim))
 #else
 			if ((pPlayer == pThrower) && (pOriginalThrower == pVictim))

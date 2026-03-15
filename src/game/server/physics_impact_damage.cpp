@@ -333,14 +333,13 @@ float CalculatePhysicsImpactDamage( int index, gamevcollisionevent_t *pEvent, co
 
 	float otherMass = pEvent->pObjects[otherIndex]->GetMass();
 
-#ifdef BDSBASE
 	if (pEvent->pObjects[otherIndex]->GetGameFlags() & FVPHYSICS_PLAYER_HELD)
 	{
 		// if the player is holding the object, use its real mass (player holding reduced the mass)
 
 		CBasePlayer* pPlayer = NULL;
 		
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 		// See which MP player is holding the physics object and then use that player to get the real mass of the object.
 		// This is ugly but better than having linkage between an object and its "holding" player.
 		for (int i = 1; i <= gpGlobals->maxClients; i++)
@@ -378,20 +377,6 @@ float CalculatePhysicsImpactDamage( int index, gamevcollisionevent_t *pEvent, co
 			otherMass = pPlayer->GetHeldObjectMass(pEvent->pObjects[otherIndex]);
 		}
 	}
-#else
-	if (pEvent->pObjects[otherIndex]->GetGameFlags() & FVPHYSICS_PLAYER_HELD)
-	{
-		if (gpGlobals->maxClients == 1)
-		{
-			// if the player is holding the object, use it's real mass (player holding reduced the mass)
-			CBasePlayer* pPlayer = UTIL_GetLocalPlayer();
-			if (pPlayer)
-			{
-				otherMass = pPlayer->GetHeldObjectMass(pEvent->pObjects[otherIndex]);
-			}
-		}
-	}
-#endif
 
 	// NOTE: sum the mass of each object in this system for the purpose of damage
 	if ( pEvent->pEntities[otherIndex] && (pEvent->pObjects[otherIndex]->GetGameFlags() & FVPHYSICS_MULTIOBJECT_ENTITY) )
@@ -483,13 +468,12 @@ float CalculatePhysicsImpactDamage( int index, gamevcollisionevent_t *pEvent, co
 		// prop, so recompute:
 		invMass = 1.0f / pEvent->pObjects[index]->GetMass();
 	}
-#ifdef BDSBASE
 	else if (pEvent->pObjects[index]->GetGameFlags() & FVPHYSICS_PLAYER_HELD)
 	{
 		// if the player is holding the object, use it's real mass (player holding reduced the mass)
 		CBasePlayer* pPlayer = NULL;
 
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 		// See which MP player is holding the physics object and then use that player to get the real mass of the object.
 		// This is ugly but better than having linkage between an object and its "holding" player.
 		for (int i = 1; i <= gpGlobals->maxClients; i++)
@@ -531,24 +515,6 @@ float CalculatePhysicsImpactDamage( int index, gamevcollisionevent_t *pEvent, co
 			}
 		}
 	}
-#else
-	else if (pEvent->pObjects[index]->GetGameFlags() & FVPHYSICS_PLAYER_HELD)
-	{
-		if (gpGlobals->maxClients == 1)
-		{
-			// if the player is holding the object, use it's real mass (player holding reduced the mass)
-			CBasePlayer* pPlayer = UTIL_GetLocalPlayer();
-			if (pPlayer)
-			{
-				float mass = pPlayer->GetHeldObjectMass(pEvent->pObjects[index]);
-				if (mass > 0)
-				{
-					invMass = 1.0f / mass;
-				}
-			}
-		}
-	}
-#endif
 
 	eliminatedEnergy *= invMass * energyScale;
 	

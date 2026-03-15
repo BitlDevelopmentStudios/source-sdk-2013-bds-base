@@ -942,12 +942,10 @@ CViewRender::CViewRender()
 
 	m_szCurrentScriptMaterialName[0] = '\0';
 
-#ifdef BDSBASE
 	for (int i = 0; i < MAX_SCRIPT_OVERLAYS; i++)
 	{
 		m_szCurrentScriptMaterialArrayName[i][0] = '\0';
 	}
-#endif
 }
 
 
@@ -962,13 +960,11 @@ void CViewRender::LevelShutdown( void )
 	m_ScriptOverlayMaterial.Shutdown();
 	m_szCurrentScriptMaterialName[0] = '\0';
 
-#ifdef BDSBASE
 	for (int i = 0; i < MAX_SCRIPT_OVERLAYS; i++)
 	{
 		m_ScriptOverlayMaterialArray[i].Shutdown();
 		m_szCurrentScriptMaterialArrayName[i][0] = '\0';
 	}
-#endif
 }
 
 
@@ -1261,20 +1257,13 @@ void CViewRender::PerformScreenOverlay( int x, int y, int w, int h )
 		}
 	}
 
-#ifdef BDSBASE
 	C_BasePlayer* pLocalPlayer = C_BasePlayer::GetLocalPlayer();
 	if (!pLocalPlayer)
 		return;
-#endif
 
 	{
 		const char *pszScriptMaterial = nullptr;
-
-#ifndef BDSBASE
-		C_BasePlayer *pLocalPlayer = C_BasePlayer::GetLocalPlayer();
-		if ( pLocalPlayer )
-#endif
-			pszScriptMaterial = pLocalPlayer->GetScriptOverlayMaterial();
+		pszScriptMaterial = pLocalPlayer->GetScriptOverlayMaterial();
 
 		if ( pszScriptMaterial && *pszScriptMaterial )
 		{
@@ -1320,7 +1309,6 @@ void CViewRender::PerformScreenOverlay( int x, int y, int w, int h )
 		}
 	}
 
-#ifdef BDSBASE
 	for (int i = 0; i < MAX_SCRIPT_OVERLAYS; i++)
 	{
 		const char* pszScriptMaterial;
@@ -1369,7 +1357,6 @@ void CViewRender::PerformScreenOverlay( int x, int y, int w, int h )
 			}
 		}
 	}
-#endif
 }
 
 void CViewRender::DrawUnderwaterOverlay( void )
@@ -2106,10 +2093,8 @@ void CViewRender::RenderView( const CViewSetup &viewRender, int nClearFlags, int
 
 	m_CurrentView = viewRender;
 
-#ifdef BDSBASE
 	if (building_cubemaps.GetBool())
 		m_CurrentView.fov = RAD2DEG(2.0f * atanf(64.0f / (64 - 0.5f)));
-#endif
 
 	C_BaseAnimating::AutoAllowBoneAccess boneaccess( true, true );
 	VPROF( "CViewRender::RenderView" );
@@ -2120,7 +2105,6 @@ void CViewRender::RenderView( const CViewSetup &viewRender, int nClearFlags, int
 	{
 		// We know they were running at least 8.0 when the game started...we check the 
 		// value in ClientDLL_Init()...so they must be messing with their DirectX settings.
-#ifdef BDSBASE
 #ifdef TF_CLIENT_DLL
 		static bool bFirstTime = true;
 		if (bFirstTime)
@@ -2129,18 +2113,6 @@ void CViewRender::RenderView( const CViewSetup &viewRender, int nClearFlags, int
 			Msg("This game has a minimum requirement of DirectX 8.0 to run properly.\n");
 		}
 		return;
-#endif
-#else
-		if ((Q_stricmp(COM_GetModDirectory(), "tf") == 0) || (Q_stricmp(COM_GetModDirectory(), "tf_beta") == 0))
-		{
-			static bool bFirstTime = true;
-			if (bFirstTime)
-			{
-				bFirstTime = false;
-				Msg("This game has a minimum requirement of DirectX 8.0 to run properly.\n");
-			}
-			return;
-		}
 #endif
 	}
 
@@ -4690,11 +4662,7 @@ void CRendering3dView::DrawTranslucentRenderables( bool bInSkybox, bool bShadowD
 				DetailObjectSystem()->RenderTranslucentDetailObjects( CurrentViewOrigin(), CurrentViewForward(), CurrentViewRight(), CurrentViewUp(), nDetailLeafCount, pDetailLeafList );
 
 				// Draw translucent renderables in the leaf interspersed with detail props
-#ifdef BDSBASE
 				for (; iCurTranslucentEntity >= 0 && pEntities[iCurTranslucentEntity].m_iWorldListInfoLeaf == iThisLeaf; --iCurTranslucentEntity)
-#else
-				for (; pEntities[iCurTranslucentEntity].m_iWorldListInfoLeaf == iThisLeaf && iCurTranslucentEntity >= 0; --iCurTranslucentEntity)
-#endif
 				{
 					IClientRenderable *pRenderable = pEntities[iCurTranslucentEntity].m_pRenderable;
 
@@ -4740,11 +4708,7 @@ void CRendering3dView::DrawTranslucentRenderables( bool bInSkybox, bool bShadowD
 				// Therefore no fixup on nDetailLeafCount is required as in the above section
 				DetailObjectSystem()->RenderTranslucentDetailObjects( CurrentViewOrigin(), CurrentViewForward(), CurrentViewRight(), CurrentViewUp(), nDetailLeafCount, pDetailLeafList );
 
-#ifdef BDSBASE
 				for (; iCurTranslucentEntity >= 0 && pEntities[iCurTranslucentEntity].m_iWorldListInfoLeaf == iThisLeaf; --iCurTranslucentEntity)
-#else
-				for (; pEntities[iCurTranslucentEntity].m_iWorldListInfoLeaf == iThisLeaf && iCurTranslucentEntity >= 0; --iCurTranslucentEntity)
-#endif
 				{
 					IClientRenderable *pRenderable = pEntities[iCurTranslucentEntity].m_pRenderable;
 
@@ -5300,13 +5264,11 @@ void CFreezeFrameView::Draw( void )
 	pRenderContext->PushVertexShaderGPRAllocation( 16 ); //max out pixel shader threads
 #endif
 
-#ifdef BDSBASE
 	if (mat_viewportupscale.GetBool() && mat_viewportscale.GetFloat() < 1.0f)
 	{
 		// mat_viewportscale breaks it without that
 		vgui::surface()->GetScreenSize(width, height);
 	}
-#endif
 
 	// we might only need half of the texture if we're rendering in stereo
 	int nTexX0 = 0, nTexY0 = 0;

@@ -5,9 +5,7 @@
 //=============================================================================
 
 #include "cbase.h"
-#ifdef BDSBASE
 #include "tier0/vprof.h"
-#endif
 #include <vgui_controls/Controls.h>
 #include <vgui_controls/Panel.h>
 #include <vgui/ISurface.h>
@@ -20,18 +18,11 @@
 
 DECLARE_BUILD_FACTORY( CAvatarImagePanel );
 
-
-#ifdef BDSBASE
 CUtlMap< AvatarImagePair_t, int > CAvatarImage::s_staticAvatarCache; // cache of steam id's to textureids to use for static avatars
 CUtlMap< CUtlString, AnimatedAvatar_t* > CAvatarImage::s_animatedAvatarCache; // cache of avatar URLs to textureids to use for animated avatars
-#else
-CUtlMap< AvatarImagePair_t, int> CAvatarImage::s_AvatarImageCache; // cache of steam id's to textureids to use for images
-#endif
 bool CAvatarImage::m_sbInitializedAvatarCache = false;
 
-#ifdef BDSBASE
 ConVar cl_animated_avatars("cl_animated_avatars", "1", FCVAR_ARCHIVE, "Enable animated avatars");
-#endif
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -58,20 +49,14 @@ CAvatarImage::CAvatarImage( void )
 	m_bDrawFriend = true;
 
 	// [menglish] Default icon for avatar icons if there is no avatar icon for the player
-#ifdef BDSBASE
 	m_iStaticTextureID = -1;
-#else
-	m_iTextureID = -1;
-#endif
 
 	// set up friend icon
 	m_pFriendIcon = gHUD.GetIcon( "ico_friend_indicator_avatar" );
 
 	m_pDefaultImage = NULL;
 
-#ifdef BDSBASE
 	m_pAnimatedAvatar = NULL;
-#endif
 
 	SetAvatarSize(DEFAULT_AVATAR_SIZE, DEFAULT_AVATAR_SIZE);
 
@@ -82,12 +67,8 @@ CAvatarImage::CAvatarImage( void )
 	if ( !m_sbInitializedAvatarCache) 
 	{
 		m_sbInitializedAvatarCache = true;
-#ifdef BDSBASE
 		SetDefLessFunc(s_staticAvatarCache);
 		s_animatedAvatarCache.SetLessFunc(UtlStringLessFunc);
-#else
-		SetDefLessFunc(s_AvatarImageCache);
-#endif
 	}
 }
 
@@ -144,7 +125,6 @@ void CAvatarImage::OnPersonaStateChanged( PersonaStateChange_t *info )
 	}
 }
 
-#ifdef BDSBASE
 //-----------------------------------------------------------------------------
 // Purpose: EquippedProfileItems_t callresult
 //-----------------------------------------------------------------------------
@@ -211,7 +191,6 @@ void CAvatarImage::OnHTTPRequestCompleted(HTTPRequestCompleted_t* pInfo, bool bI
 
 	SteamHTTP()->ReleaseHTTPRequest(pInfo->m_hRequest);
 }
-#endif
 
 void CAvatarImage::UpdateAvatarImageSize()
 {
@@ -229,7 +208,6 @@ void CAvatarImage::UpdateAvatarImageSize()
 	m_AvatarSize = eNewSize;
 }
 
-#ifdef BDSBASE
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
@@ -309,7 +287,6 @@ void CAvatarImage::LoadStaticAvatar()
 		}
 	}
 }
-#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: load the avatar image if we have a load pending
@@ -324,47 +301,12 @@ void CAvatarImage::LoadAvatarImage()
 	// attempt to retrieve the avatar image from Steam
 	if ( m_bLoadPending && steamapicontext->SteamFriends() && steamapicontext->SteamUtils() && gpGlobals->curtime >= m_fNextLoadTime )
 	{
-#ifdef BDSBASE
 		LoadStaticAvatar();
 		if (cl_animated_avatars.GetBool())
 		{
 			SteamAPICall_t hRequestItemsCall = SteamFriends()->RequestEquippedProfileItems(m_SteamID);
 			m_sEquippedProfileItemsRequestedCallback.Set(hRequestItemsCall, this, &CAvatarImage::OnEquippedProfileItemsRequested);
 		}
-#else
-		if (!steamapicontext->SteamFriends()->RequestUserInformation(m_SteamID, false))
-		{
-			int iAvatar = 0;
-			switch (m_AvatarSize)
-			{
-			case k_EAvatarSize32x32:
-				iAvatar = steamapicontext->SteamFriends()->GetSmallFriendAvatar(m_SteamID);
-				break;
-			case k_EAvatarSize64x64:
-				iAvatar = steamapicontext->SteamFriends()->GetMediumFriendAvatar(m_SteamID);
-				break;
-			case k_EAvatarSize184x184:
-				iAvatar = steamapicontext->SteamFriends()->GetLargeFriendAvatar(m_SteamID);
-				break;
-			}
-
-			//Msg( "Got avatar %d for SteamID %llud (%s)\n", iAvatar, m_SteamID.ConvertToUint64(), steamapicontext->SteamFriends()->GetFriendPersonaName( m_SteamID ) );
-
-			if (iAvatar > 0) // if its zero, user doesn't have an avatar.  If -1, Steam is telling us that it's fetching it
-			{
-				uint32 wide = 0, tall = 0;
-				if (steamapicontext->SteamUtils()->GetImageSize(iAvatar, &wide, &tall) && wide > 0 && tall > 0)
-				{
-					int destBufferSize = wide * tall * 4;
-					byte* rgbDest = (byte*)stackalloc(destBufferSize);
-					if (steamapicontext->SteamUtils()->GetImageRGBA(iAvatar, rgbDest, destBufferSize))
-						InitFromRGBA(iAvatar, rgbDest, wide, tall);
-
-					stackfree(rgbDest);
-				}
-			}
-		}
-#endif
 
 		if ( m_bValid )
 		{
@@ -397,7 +339,6 @@ void CAvatarImage::UpdateFriendStatus( void )
 //-----------------------------------------------------------------------------
 void CAvatarImage::InitFromRGBA( int iAvatar, const byte *rgba, int width, int height )
 {
-#ifdef BDSBASE
 	int iTexIndex = s_staticAvatarCache.Find(AvatarImagePair_t(m_SteamID, iAvatar));
 	if (iTexIndex == s_staticAvatarCache.InvalidIndex())
 	{
@@ -407,19 +348,9 @@ void CAvatarImage::InitFromRGBA( int iAvatar, const byte *rgba, int width, int h
 		s_staticAvatarCache[iTexIndex] = m_iStaticTextureID;
 	}
 	else
-		m_iStaticTextureID = s_staticAvatarCache[iTexIndex];
-#else
-	int iTexIndex = s_AvatarImageCache.Find(AvatarImagePair_t(m_SteamID, iAvatar));
-	if (iTexIndex == s_AvatarImageCache.InvalidIndex())
 	{
-		m_iTextureID = vgui::surface()->CreateNewTextureID(true);
-		g_pMatSystemSurface->DrawSetTextureRGBAEx2(m_iTextureID, rgba, width, height, IMAGE_FORMAT_RGBA8888, true);
-		iTexIndex = s_AvatarImageCache.Insert(AvatarImagePair_t(m_SteamID, iAvatar));
-		s_AvatarImageCache[iTexIndex] = m_iTextureID;
+		m_iStaticTextureID = s_staticAvatarCache[iTexIndex];
 	}
-	else
-		m_iTextureID = s_AvatarImageCache[iTexIndex];
-#endif
 	
 	m_bValid = true;
 }
@@ -450,7 +381,6 @@ void CAvatarImage::Paint( void )
 		LoadAvatarImage();
 	}
 
-#ifdef BDSBASE
 	int iTextureID = m_iStaticTextureID;
 	if (m_pAnimatedAvatar && !m_pAnimatedAvatar->m_textureIDs.IsEmpty() && cl_animated_avatars.GetBool())
 	{
@@ -477,15 +407,10 @@ void CAvatarImage::Paint( void )
 			iTextureID = iFrameTexID;
 		}
 	}
-#endif
 
 	if ( m_bValid )
 	{
-#ifdef BDSBASE
 		vgui::surface()->DrawSetTexture(iTextureID);
-#else
-		vgui::surface()->DrawSetTexture(m_iTextureID);
-#endif
 		vgui::surface()->DrawSetColor( m_Color );
 		vgui::surface()->DrawTexturedRect(posX, posY, posX + m_avatarWide, posY + m_avatarTall);
 	}

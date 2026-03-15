@@ -143,7 +143,7 @@ static const char *s_PreserveEnts[] =
 	"trigger_soundscape",
 	"viewmodel",
 	"predicted_viewmodel",
-#if defined(BDSBASE) && defined(BDSBASE_ALLOW_C_ARMS)
+#if defined(BDSBASE_ALLOW_C_ARMS)
 	"hand_viewmodel",
 #endif
 	"worldspawn",

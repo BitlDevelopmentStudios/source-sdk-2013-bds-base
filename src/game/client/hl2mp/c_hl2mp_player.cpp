@@ -135,13 +135,11 @@ void C_HL2MP_Player::UpdateIDTarget()
 	if ( !IsLocalPlayer() )
 		return;
 
-#ifdef BDSBASE
 	if (!hud_showtargetid.GetBool())
 	{
 		m_iIDEntIndex = 0;
 		return;
 	}
-#endif
 
 	// Clear old target and find a new one
 	m_iIDEntIndex = 0;
@@ -182,10 +180,6 @@ void C_HL2MP_Player::TraceAttack( const CTakeDamageInfo &info, const Vector &vec
 	if ( m_takedamage )
 	{
 		AddMultiDamage( info, this );
-
-#ifndef BDSBASE
-		int blood = BloodColor();
-#endif
 		
 		CBaseEntity *pAttacker = info.GetAttacker();
 
@@ -194,14 +188,6 @@ void C_HL2MP_Player::TraceAttack( const CTakeDamageInfo &info, const Vector &vec
 			if ( HL2MPRules()->IsTeamplay() && pAttacker->InSameTeam( this ) == true )
 				return;
 		}
-
-#ifndef BDSBASE
-		if (blood != DONT_BLEED)
-		{
-			SpawnBlood(vecOrigin, vecDir, blood, flDistance);// a little surface blood.
-			TraceBleed(flDistance, vecDir, ptr, info.GetDamageType());
-		}
-#endif
 	}
 }
 
@@ -808,7 +794,6 @@ void C_HL2MP_Player::HandleSpeedChanges( CMoveData *mv )
 
 	bool bSprinting = m_HL2Local.m_bNewSprinting;
 
-#ifdef BDSBASE
 	// Fixes: 
 	// 1) Completely stop sprinting when going underwater 
 	// 2) Fix sprint not starting during unducking
@@ -825,7 +810,6 @@ void C_HL2MP_Player::HandleSpeedChanges( CMoveData *mv )
 
 	if (m_Local.m_bDucked && m_Local.m_bDucking && !bSprinting && (mv->m_nButtons & IN_SPEED))
 		bSprinting = true;
-#endif
 
 	if ( bWantsToChangeSprinting )
 	{

@@ -400,7 +400,7 @@ bool CGib::SUB_AllowedToFade( void )
 			return false;
 	}
 
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 	CBasePlayer* pPlayer = UTIL_GetNearestVisiblePlayer(this);
 #else
 	CBasePlayer* pPlayer = (AI_IsSinglePlayer()) ? UTIL_GetLocalPlayer() : NULL;

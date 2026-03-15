@@ -3277,9 +3277,7 @@ void CAI_BaseNPC::RunTask( const Task_t *pTask )
 					}
 					else if (GetSmoothedVelocity().Length() > 0.01) // use an EPSILON
 					{
-#ifdef BDSBASE
 						DevWarning("use an EPSILON damnit!!\n");
-#endif
 						// wait until you land
 						break;
 					}
@@ -3366,7 +3364,7 @@ void CAI_BaseNPC::RunTask( const Task_t *pTask )
 	case TASK_FACE_PLAYER:
 		{
 			// Get edict for one player
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 			CBasePlayer* pPlayer = UTIL_GetNearestVisiblePlayer(this);
 #else
 			CBasePlayer* pPlayer = AI_GetSinglePlayer();
@@ -3668,7 +3666,7 @@ void CAI_BaseNPC::RunTask( const Task_t *pTask )
 
 						if( pHint )
 						{
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 							CBasePlayer* pPlayer = UTIL_GetNearestPlayer(GetAbsOrigin());
 #else
 							CBasePlayer* pPlayer = AI_GetSinglePlayer();

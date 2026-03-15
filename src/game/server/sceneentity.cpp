@@ -3862,7 +3862,7 @@ CBaseEntity *CSceneEntity::FindNamedEntity( const char *name, CBaseEntity *pActo
 
 	if ( !stricmp( name, "Player" ) || !stricmp( name, "!player" ))
 	{
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 		entity = UTIL_GetNearestPlayer(GetAbsOrigin());
 #else
 		entity = (gpGlobals->maxClients == 1) ? (CBaseEntity*)UTIL_GetLocalPlayer() : NULL;

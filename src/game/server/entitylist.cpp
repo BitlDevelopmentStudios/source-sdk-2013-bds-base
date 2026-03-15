@@ -526,22 +526,18 @@ CBaseEntity *CGlobalEntityList::FindEntityProcedural( const char *szName, CBaseE
 		//
 		if ( FStrEq( pName, "player" ) )
 		{
-#ifdef BDSBASE
 			if (pSearchingEntity)
 			{
 				return FindEntityGenericNearest("player", pSearchingEntity->GetAbsOrigin(), 0, pSearchingEntity, pActivator, pCaller);
 			}
 			else
 			{
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 				return (CBaseEntity*)UTIL_GetLocalPlayer();
 #else
 				return (CBaseEntity*)UTIL_PlayerByIndex(1);
 #endif
 			}
-#else
-			return (CBaseEntity*)UTIL_PlayerByIndex(1);
-#endif
 		}
 		else if ( FStrEq( pName, "pvsplayer" ) )
 		{
@@ -557,7 +553,7 @@ CBaseEntity *CGlobalEntityList::FindEntityProcedural( const char *szName, CBaseE
 			else
 			{
 				// FIXME: error condition?
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 				return (CBaseEntity*)UTIL_GetLocalPlayer();
 #else
 				return (CBaseEntity*)UTIL_PlayerByIndex(1);
@@ -591,14 +587,12 @@ CBaseEntity *CGlobalEntityList::FindEntityProcedural( const char *szName, CBaseE
 			else
 			{
 #endif
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 				return FindPickerEntity(UTIL_GetLocalPlayer());
 #else
 				return FindPickerEntity(UTIL_PlayerByIndex(1));
 #endif //BDSBASE
-#ifdef BDSBASE
 			}
-#endif
 		}
 		else if ( FStrEq( pName, "self" ) )
 		{

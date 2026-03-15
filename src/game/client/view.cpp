@@ -45,10 +45,8 @@
 #include "ScreenSpaceEffects.h"
 #include "sourcevr/isourcevirtualreality.h"
 #include "client_virtualreality.h"
-#ifdef BDSBASE
 #include "fmtstr.h"
 #include "vgui/ISystem.h"
-#endif
 
 #if defined( REPLAY_ENABLED )
 #include "replay/ireplaysystem.h"
@@ -127,9 +125,7 @@ static ConVar r_mapextents( "r_mapextents", "16384", FCVAR_CHEAT,
 ConVar	gl_clear( "gl_clear", "0");
 ConVar	gl_clear_randomcolor( "gl_clear_randomcolor", "0", FCVAR_CHEAT, "Clear the back buffer to random colors every frame. Helps spot open seams in geometry." );
 
-#ifdef BDSBASE
 static ConVar r_nearz("r_nearz", "-1", FCVAR_CHEAT, "Override the near clipping plane.");
-#endif
 static ConVar r_farz( "r_farz", "-1", FCVAR_CHEAT, "Override the far clipping plane. -1 means to use the value in env_fog_controller." );
 static ConVar cl_demoviewoverride( "cl_demoviewoverride", "0", 0, "Override view during demo playback" );
 
@@ -599,7 +595,6 @@ static QAngle s_DbgSetupAngles;
 //-----------------------------------------------------------------------------
 float CViewRender::GetZNear()
 {
-#ifdef BDSBASE
 	// Initialize view structure with default values
 	float nearZ;
 	if (r_nearz.GetFloat() < 0)
@@ -613,9 +608,6 @@ float CViewRender::GetZNear()
 	}
 
 	return nearZ;
-#else
-	return VIEW_NEARZ;
-#endif
 }
 
 float CViewRender::GetZFar()
@@ -748,13 +740,8 @@ void CViewRender::SetUpViews()
 	float fDefaultFov = default_fov.GetFloat();
 	float flFOVOffset = fDefaultFov - viewEye.fov;
 
-#ifdef BDSBASE
 	//Adjust the viewmodel's FOV to move with any FOV offsets on the viewer's end
 	viewEye.fovViewmodel = fabs(g_pClientMode->GetViewModelFOV() - MIN(flFOVOffset, g_pClientMode->GetViewModelFOV()));
-#else
-	//Adjust the viewmodel's FOV to move with any FOV offsets on the viewer's end
-	viewEye.fovViewmodel = g_pClientMode->GetViewModelFOV() - flFOVOffset;
-#endif
 
 	if ( UseVR() )
 	{
@@ -1303,16 +1290,11 @@ static void GetPos( const CCommand &args, Vector &vecOrigin, QAngle &angles )
 	}
 }
 
-#ifdef BDSBASE
 CON_COMMAND(spec_pos, "dump position and angles to the console ( 1 = to clipboard )")
-#else
-CON_COMMAND( spec_pos, "dump position and angles to the console" )
-#endif
 {
 	Vector vecOrigin;
 	QAngle angles;
 	GetPos( args, vecOrigin, angles );
-#ifdef BDSBASE
 	bool bClip = (args.ArgC() >= 2 && Q_atoi(args[1]) == 1);
 
 	CFmtStr fmtCommand(
@@ -1325,23 +1307,14 @@ CON_COMMAND( spec_pos, "dump position and angles to the console" )
 	{
 		vgui::system()->SetClipboardText(fmtCommand.String(), fmtCommand.Length());
 	}
-#else
-	Warning( "spec_goto %.1f %.1f %.1f %.1f %.1f\n", vecOrigin.x, vecOrigin.y, 
-		vecOrigin.z, angles.x, angles.y );
-#endif
 }
 
-#ifdef BDSBASE
 CON_COMMAND(getpos, "dump position and angles to the console ( 1 = to clipboard, 2 = exact pos, 3 = all )")
-#else
-CON_COMMAND( getpos, "dump position and angles to the console" )
-#endif
 {
 	Vector vecOrigin;
 	QAngle angles;
 	GetPos( args, vecOrigin, angles );
 
-#ifdef BDSBASE
 	int  nParm = (args.ArgC() >= 2) ? Q_atoi(args[1]) : 0;
 	bool bClip = (nParm == 1 || nParm == 3);
 	bool bExact = (nParm == 2 || nParm == 3);
@@ -1357,17 +1330,5 @@ CON_COMMAND( getpos, "dump position and angles to the console" )
 	{
 		vgui::system()->SetClipboardText(fmtCommand.String(), fmtCommand.Length());
 	}
-#else
-	const char *pCommand1 = "setpos";
-	const char *pCommand2 = "setang";
-	if ( args.ArgC() == 2 && atoi( args[1] ) == 2 )
-	{
-		pCommand1 = "setpos_exact";
-		pCommand2 = "setang_exact";
-	}
-
-	Warning( "%s %f %f %f;", pCommand1, vecOrigin.x, vecOrigin.y, vecOrigin.z );
-	Warning( "%s %f %f %f\n", pCommand2, angles.x, angles.y, angles.z );
-#endif
 }
 

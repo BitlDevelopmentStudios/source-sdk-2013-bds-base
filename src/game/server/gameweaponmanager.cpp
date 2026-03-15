@@ -241,7 +241,7 @@ void CGameWeaponManager::Think()
 
 		if ( gpGlobals->maxClients == 1 )
 		{
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 			CBasePlayer* pPlayer = UTIL_GetNearestVisiblePlayer(pCandidate);
 #else
 			CBasePlayer* pPlayer = UTIL_GetLocalPlayer();

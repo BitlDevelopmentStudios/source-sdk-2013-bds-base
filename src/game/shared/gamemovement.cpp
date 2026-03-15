@@ -1893,7 +1893,6 @@ void CGameMovement::Accelerate( Vector& wishdir, float wishspeed, float accel )
 		return;
 
 	// See if we are changing direction a bit
-#if defined(BDSBASE)
 	if (sv_wallstrafe.GetBool())
 	{
 		currentspeed = mv->m_vecVelocity.Dot(wishdir);
@@ -1902,9 +1901,6 @@ void CGameMovement::Accelerate( Vector& wishdir, float wishspeed, float accel )
 	{
 		currentspeed = sqrt(DotProduct(mv->m_vecVelocity, mv->m_vecVelocity));
 	}
-#else
-	currentspeed = mv->m_vecVelocity.Dot(wishdir);
-#endif //BDSBASE
 
 	// Reduce wishspeed by the amount of veer.
 	addspeed = wishspeed - currentspeed;

@@ -400,7 +400,6 @@ void CBaseHudWeaponSelection::UserCmd_Slot10(void)
 	SelectSlot( 10 );
 }
 
-#ifdef BDSBASE
 #ifdef HL2_CLIENT_DLL
 void ClientInstantPhysSwap()
 {
@@ -433,7 +432,6 @@ void ClientInstantPhysSwap()
 }
 
 static ConCommand cl_physswap("phys_swap", ClientInstantPhysSwap, "Client-predicted physcannon swap for low-latency switching.");
-#endif
 #endif
 
 //-----------------------------------------------------------------------------

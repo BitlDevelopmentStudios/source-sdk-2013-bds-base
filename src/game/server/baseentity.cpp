@@ -1070,7 +1070,7 @@ void CBaseEntity::DrawDebugGeometryOverlays(void)
 		}
 	}
 
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 	CBasePlayer* pPlayer = UTIL_GetNearestPlayer(GetAbsOrigin());
 	if (m_debugOverlays & OVERLAY_AUTOAIM_BIT && (GetFlags() & FL_AIMTARGET) && pPlayer != NULL)
 #else
@@ -1900,10 +1900,9 @@ int CBaseEntity::VPhysicsTakeDamage( const CTakeDamageInfo &info )
 		if ( gameFlags & FVPHYSICS_PLAYER_HELD )
 		{
 			// if the player is holding the object, use it's real mass (player holding reduced the mass)
-#ifdef BDSBASE
 			CBasePlayer* pPlayer = NULL;
 
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 			for (int i = 1; i <= gpGlobals->maxClients; i++)
 			{
 				CBasePlayer* tempPlayer = UTIL_PlayerByIndex(i);
@@ -1933,9 +1932,6 @@ int CBaseEntity::VPhysicsTakeDamage( const CTakeDamageInfo &info )
 					}
 				}
 			}
-#endif
-#else
-			CBasePlayer* pPlayer = UTIL_GetLocalPlayer();
 #endif
 			if ( pPlayer )
 			{
@@ -8052,7 +8048,7 @@ void CBaseEntity::DispatchResponse( const char *conceptName )
 	ModifyOrAppendCriteria( set );
 
 	// Append local player criteria to set,too
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 	CBasePlayer* pPlayer = UTIL_GetNearestPlayer(GetAbsOrigin());
 #else
 	CBasePlayer* pPlayer = UTIL_GetLocalPlayer();
@@ -8115,7 +8111,7 @@ void CBaseEntity::DumpResponseCriteria( void )
 	ModifyOrAppendCriteria( set );
 
 	// Append local player criteria to set,too
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 	CBasePlayer* pPlayer = UTIL_GetNearestPlayer(GetAbsOrigin());
 #else
 	CBasePlayer* pPlayer = UTIL_GetLocalPlayer();
@@ -8617,7 +8613,7 @@ bool CBaseEntity::SUB_AllowedToFade( void )
 
 	// on Xbox, allow these to fade out
 #ifndef _XBOX
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 	CBasePlayer* pPlayer = UTIL_GetNearestVisiblePlayer(this);
 #else
 	CBasePlayer* pPlayer = (AI_IsSinglePlayer()) ? UTIL_GetLocalPlayer() : NULL;

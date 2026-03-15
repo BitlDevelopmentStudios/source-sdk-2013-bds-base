@@ -74,7 +74,7 @@ float GetZoomOwnerDesiredFOV( CBaseEntity *pZoomOwner )
 //-----------------------------------------------------------------------------
 void CEnvZoom::InputZoom( inputdata_t &inputdata )
 {
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 	CBasePlayer* pPlayer;
 
 	if (inputdata.pActivator && inputdata.pActivator->IsPlayer())
@@ -114,7 +114,7 @@ void CEnvZoom::InputZoom( inputdata_t &inputdata )
 //-----------------------------------------------------------------------------
 void CEnvZoom::InputUnZoom( inputdata_t &inputdata )
 {
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 	CBasePlayer* pPlayer;
 	if (inputdata.pActivator && inputdata.pActivator->IsPlayer())
 		pPlayer = ToBasePlayer(inputdata.pActivator);

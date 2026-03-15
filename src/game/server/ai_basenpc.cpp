@@ -87,7 +87,7 @@
 #include "datacache/imdlcache.h"
 #include "vstdlib/jobthread.h"
 
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 #ifdef HL2MP
 //TDT - Information: Here we include the hl2mp gamerules.
 #include "hl2mp_gamerules.h"
@@ -261,7 +261,7 @@ int CAI_Manager::NumAIs()
 
 //-------------------------------------
 
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 int CAI_Manager::AddAI(CAI_BaseNPC* pAI)
 {
 	m_AIs.AddToTail(pAI);
@@ -657,23 +657,7 @@ void CAI_BaseNPC::Ignite( float flFlameLifetime, bool bNPCOnly, float flSize, bo
 {
 	BaseClass::Ignite( flFlameLifetime, bNPCOnly, flSize, bCalledByLevelDesigner );
 
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
-	/*#ifdef HL2_EPISODIC
-		if ( AI_IsSinglePlayer() )
-		{
-			CBasePlayer *pPlayer = AI_GetSinglePlayer();
-			if ( pPlayer->IRelationType( this ) != D_LI )
-			{
-				CNPC_Alyx *alyx = CNPC_Alyx::GetAlyx();
-
-				if ( alyx )
-				{
-					alyx->EnemyIgnited( this );
-				}
-			}
-		}
-	#endif*/
-#else
+#if !defined(BDSBASE_NPC)
 #ifdef HL2_EPISODIC
 	if (AI_IsSinglePlayer())
 	{
@@ -817,7 +801,7 @@ int CAI_BaseNPC::OnTakeDamage_Alive( const CTakeDamageInfo &info )
 			CBasePlayer* pPlayer = AI_GetSinglePlayer();
 #endif //BDSBASE
 
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 			if (pAttacker && pAttacker->IsAlive() && UTIL_GetNearestPlayer(GetAbsOrigin()))
 #else
 			if (pAttacker && pAttacker->IsAlive() && pPlayer)
@@ -3152,7 +3136,7 @@ void CAI_BaseNPC::UpdateEfficiency( bool bInPVS )
 
 	//---------------------------------
 
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 	CBasePlayer* pPlayer = UTIL_GetNearestPlayer(GetAbsOrigin());
 #else
 	CBasePlayer* pPlayer = AI_GetSinglePlayer();
@@ -3268,7 +3252,7 @@ void CAI_BaseNPC::UpdateEfficiency( bool bInPVS )
 				}
 			}
 			
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 			if (pCurrentSound)
 				iSound = pCurrentSound->NextSound();
 			else
@@ -3407,7 +3391,7 @@ void CAI_BaseNPC::UpdateSleepState( bool bInPVS )
 {
 	if ( GetSleepState() > AISS_AWAKE )
 	{
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 		CBasePlayer* pLocalPlayer = UTIL_GetNearestPlayer(GetAbsOrigin());
 #else
 		CBasePlayer* pLocalPlayer = AI_GetSinglePlayer();
@@ -3466,7 +3450,7 @@ void CAI_BaseNPC::UpdateSleepState( bool bInPVS )
 							break;
 						}
 
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 						if (pCurrentSound)
 							iSound = pCurrentSound->NextSound();
 						else
@@ -3618,7 +3602,7 @@ void CAI_BaseNPC::RebalanceThinks()
 
 		int i;
 
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 		CBasePlayer* pPlayer = UTIL_GetNearestPlayer(GetAbsOrigin());
 #else
 		CBasePlayer* pPlayer = AI_GetSinglePlayer();
@@ -3903,7 +3887,7 @@ void CAI_BaseNPC::SetPlayerAvoidState( void )
 
 		GetPlayerAvoidBounds( &vMins, &vMaxs );
 
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 		CBasePlayer* pLocalPlayer = UTIL_GetNearestPlayer(GetAbsOrigin());
 #else
 		CBasePlayer* pLocalPlayer = AI_GetSinglePlayer();
@@ -4882,7 +4866,7 @@ void CAI_BaseNPC::RunAI( void )
 		}
 	}
 
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 	if (ai_debug_loners.GetBool() && !IsInSquad())
 #else
 	if (ai_debug_loners.GetBool() && !IsInSquad() && AI_IsSinglePlayer())
@@ -4893,7 +4877,7 @@ void CAI_BaseNPC::RunAI( void )
 
 		vecPoint = EyePosition() + Vector( 0, 0, 12 );
 
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 		UTIL_GetNearestPlayer(GetAbsOrigin())->GetVectors(NULL, &right, NULL);
 #else
 		UTIL_GetLocalPlayer()->GetVectors(NULL, &right, NULL);
@@ -8757,7 +8741,7 @@ void CAI_BaseNPC::DrawDebugGeometryOverlays(void)
 
 		info.SetDamage( m_iHealth );
 		info.SetAttacker( this );
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 		info.SetInflictor((CBaseEntity*)this);
 #else
 		info.SetInflictor((AI_IsSinglePlayer()) ? (CBaseEntity*)AI_GetSinglePlayer() : (CBaseEntity*)this);
@@ -9992,7 +9976,7 @@ CBaseEntity *CAI_BaseNPC::FindNamedEntity( const char *name, IEntityFindFilter *
 {
 	if ( !stricmp( name, "!player" ))
 	{
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 		return UTIL_GetNearestPlayer(GetAbsOrigin());
 #else
 		return (CBaseEntity*)AI_GetSinglePlayer();
@@ -10011,7 +9995,7 @@ CBaseEntity *CAI_BaseNPC::FindNamedEntity( const char *name, IEntityFindFilter *
 	{
 		// FIXME: look at CBaseEntity *CNPCSimpleTalker::FindNearestFriend(bool fPlayer)
 		// punt for now
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 		return UTIL_GetNearestPlayer(GetAbsOrigin());
 #else
 		return (CBaseEntity*)AI_GetSinglePlayer();
@@ -10035,7 +10019,7 @@ CBaseEntity *CAI_BaseNPC::FindNamedEntity( const char *name, IEntityFindFilter *
 		{
 			DevMsg( "ERROR: \"player\" is no longer used, use \"!player\" in vcd instead!\n" );
 		}
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 		return UTIL_GetNearestPlayer(GetAbsOrigin());
 #else
 		return (CBaseEntity*)AI_GetSinglePlayer();
@@ -11468,7 +11452,7 @@ CAI_BaseNPC::CAI_BaseNPC(void)
 	m_interuptSchedule			= NULL;
 	m_nDebugPauseIndex			= 0;
 
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 	SetAIIndex(g_AI_Manager.AddAI(this));
 #else
 	g_AI_Manager.AddAI(this);
@@ -12016,7 +12000,7 @@ bool CAI_BaseNPC::CineCleanup()
 			{
 				SetLocalOrigin( origin );
 
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 				int drop = UTIL_DropToFloor(this, MASK_NPCSOLID, UTIL_GetNearestVisiblePlayer(this));
 #else
 				int drop = UTIL_DropToFloor(this, MASK_NPCSOLID, UTIL_GetLocalPlayer());
@@ -12097,7 +12081,7 @@ void CAI_BaseNPC::Teleport( const Vector *newPosition, const QAngle *newAngles, 
 
 bool CAI_BaseNPC::FindSpotForNPCInRadius( Vector *pResult, const Vector &vStartPos, CAI_BaseNPC *pNPC, float radius, bool bOutOfPlayerViewcone )
 {
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 	CBasePlayer* pPlayer = UTIL_GetNearestPlayer(pNPC->GetAbsOrigin());
 #else
 	CBasePlayer* pPlayer = AI_GetSinglePlayer();
@@ -12641,7 +12625,7 @@ bool CAI_BaseNPC::IsPlayerAlly( CBasePlayer *pPlayer )
 #endif //BDSBASE
 
 		// NULL means single player mode
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 		pPlayer = UTIL_GetNearestPlayer(GetAbsOrigin());
 #else
 		pPlayer = UTIL_GetLocalPlayer();
@@ -12939,7 +12923,7 @@ bool CAI_BaseNPC::FindNearestValidGoalPos( const Vector &vTestPoint, Vector *pRe
 
 	if ( vCandidate != vec3_invalid )
 	{
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 		AI_Waypoint_t* pPathToPoint = GetPathfinder()->BuildRoute(GetAbsOrigin(), vCandidate, UTIL_GetNearestPlayer(GetAbsOrigin()), 5 * 12, NAV_NONE, true);
 #else
 		AI_Waypoint_t* pPathToPoint = GetPathfinder()->BuildRoute(GetAbsOrigin(), vCandidate, AI_GetSinglePlayer(), 5 * 12, NAV_NONE, true);
@@ -14083,7 +14067,7 @@ void CAI_BaseNPC::PlayerHasIlluminatedNPC( CBasePlayer *pPlayer, float flDot )
 		if ( pInteraction->iLoopBreakTriggerMethod & SNPCINT_LOOPBREAK_ON_FLASHLIGHT_ILLUM )
 		{
 			// Only do this in alyx darkness mode
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 			if (HL2MPRules()->IsAlyxInDarknessMode())
 #else
 			if (HL2GameRules()->IsAlyxInDarknessMode())

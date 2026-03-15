@@ -14,9 +14,7 @@ class C_HL2MP_Player;
 #include "hl2mp_player_shared.h"
 #include "beamdraw.h"
 
-#ifdef BDSBASE
 extern ConVar hud_showtargetid;
-#endif
 
 //=============================================================================
 //=============================================================================
@@ -103,12 +101,10 @@ public:
 	bool SuitPower_ShouldRecharge( void );
 	float SuitPower_GetCurrentPercentage( void ) { return m_HL2Local.m_flSuitPower; }
 
-#ifdef BDSBASE
 	bool IsNewSprinting() const
 	{
 		return m_HL2Local.m_bNewSprinting;
 	}
-#endif
 	
 	bool	CanSprint( void );
 	void	StartSprinting( void );

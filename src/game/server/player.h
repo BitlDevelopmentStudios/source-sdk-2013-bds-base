@@ -271,7 +271,7 @@ public:
 	static CBasePlayer		*CreatePlayer( const char *className, edict_t *ed );
 
 	virtual void			CreateViewModel( int viewmodelindex = 0 );
-#if defined(BDSBASE) && defined(BDSBASE_ALLOW_C_ARMS) && !defined(TF_DLL)
+#if defined(BDSBASE_ALLOW_C_ARMS) && !defined(TF_DLL)
 	virtual void	        CreateHandModel(int viewmodelindex = 1, int iOtherVm = 0);
 #endif
 	CBaseViewModel			*GetViewModel( int viewmodelindex = 0, bool bObserverOK = true );
@@ -295,15 +295,13 @@ public:
 	// Returns true if this player wants pPlayer to be moved back in time when this player runs usercmds.
 	// Saves a lot of overhead on the server if we can cull out entities that don't need to lag compensate
 	// (like team members, entities out of our PVS, etc).
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 	virtual bool			WantsLagCompensationOnEntity(const CBaseEntity* pEntity, const CUserCmd* pCmd, const CBitVec<MAX_EDICTS>* pEntityTransmitBits) const;
 #else
 	virtual bool			WantsLagCompensationOnEntity(const CBasePlayer* pPlayer, const CUserCmd* pCmd, const CBitVec<MAX_EDICTS>* pEntityTransmitBits) const;
 #endif //BDSBASE
 
-#ifdef BDSBASE
 	void					DelayedSpawn();
-#endif
 	virtual void			Spawn( void );
 	virtual void			Activate( void );
 	virtual void			SharedSpawn(); // Shared between client and server.

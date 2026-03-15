@@ -781,7 +781,7 @@ void UTIL_Tracer( const Vector &vecStart, const Vector &vecEnd, int iEntIndex,
 
 void UTIL_BloodDrips( const Vector &origin, const Vector &direction, int color, int amount )
 {
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 	IPredictionSystem::SuppressHostEvents(NULL);
 #endif //BDSBASE
 

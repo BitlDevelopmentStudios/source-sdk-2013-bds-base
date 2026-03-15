@@ -148,7 +148,7 @@ void CAI_LeadBehavior::LeadPlayer( const AI_LeadArgs_t &leadArgs, CAI_LeadBehavi
 {
 #ifndef CSTRIKE_DLL
 	CAI_PlayerAlly *pOuter = dynamic_cast<CAI_PlayerAlly*>(GetOuter());
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 	if (pOuter)
 	{
 		pOuter->SetSpeechTarget(UTIL_GetNearestVisiblePlayer(pOuter));
@@ -200,7 +200,7 @@ bool CAI_LeadBehavior::CanSelectSchedule()
 
 void CAI_LeadBehavior::BeginScheduleSelection()
 {
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 	CBasePlayer* pPlayer = UTIL_GetNearestVisiblePlayer(GetOuter());
 	if (!pPlayer)
 		pPlayer = UTIL_GetNearestPlayer(GetAbsOrigin());
@@ -341,7 +341,7 @@ bool CAI_LeadBehavior::PlayerIsAheadOfMe( bool bForce )
 	m_bInitialAheadTest = false;
 
 	Vector vecClosestPoint;
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 	if (GetClosestPointOnRoute(UTIL_GetNearestPlayer(GetAbsOrigin())->GetAbsOrigin(), &vecClosestPoint))
 #else
 	if (GetClosestPointOnRoute(AI_GetSinglePlayer()->GetAbsOrigin(), &vecClosestPoint))
@@ -372,7 +372,7 @@ void CAI_LeadBehavior::GatherConditions( void )
 		}
 
 		// We have to collect data about the person we're leading around.
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 		CBaseEntity* pFollower = UTIL_GetNearestPlayer(GetAbsOrigin());
 #else
 		CBaseEntity* pFollower = AI_GetSinglePlayer();
@@ -559,7 +559,7 @@ int CAI_LeadBehavior::SelectSchedule()
 		// Player's here, but does he have the weapon we want him to have?
 		if ( m_weaponname != NULL_STRING )
 		{
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 			CBasePlayer* pFollower = UTIL_GetNearestPlayer(GetAbsOrigin());
 #else
 			CBasePlayer* pFollower = AI_GetSinglePlayer();
@@ -592,7 +592,7 @@ int CAI_LeadBehavior::SelectSchedule()
 			else
 			{
 				// We have to collect data about the person we're leading around.
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 				CBaseEntity* pFollower = UTIL_GetNearestPlayer(GetAbsOrigin());
 #else
 				CBaseEntity* pFollower = AI_GetSinglePlayer();
@@ -860,7 +860,7 @@ void CAI_LeadBehavior::StartTask( const Task_t *pTask )
 
 		case TASK_LEAD_RETRIEVE_WAIT:
 		{
-#if defined(BDSBASE) && defined(BDSBASE_NPC)
+#if defined(BDSBASE_NPC)
 			m_MoveMonitor.SetMark(UTIL_GetNearestPlayer(GetAbsOrigin()), 24);
 #else
 			m_MoveMonitor.SetMark(AI_GetSinglePlayer(), 24);
