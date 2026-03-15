@@ -18,11 +18,11 @@ $Configuration
 		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\game\shared\hl2,.\hl2,.\hl2mp,$SRCDIR\game\shared\hl2mp"
 		$PreprocessorDefinitions		"$BASE;HL2MP;HL2_DLL;NEXT_BOT"
 		//PLEASE READ THE README BEFORE TOGGLING THESE OPTIONS
-		$PreprocessorDefinitions		"$BASE;BDSBASE_TEMP_FIXDYNAMICMODELS" [$BDSBASE]
-		$PreprocessorDefinitions		"$BASE;BDSBASE_ACHIEVEMENT_NOTIFICATIONS" [$BDSBASE]
-		$PreprocessorDefinitions		"$BASE;BDSBASE_DISCORD" [$BDSBASE]
-		//$PreprocessorDefinitions		"$BASE;BDSBASE_NPC" [$BDSBASE]
-		//$PreprocessorDefinitions		"$BASE;BDSBASE_ALLOW_C_ARMS" [$BDSBASE]
+		$PreprocessorDefinitions		"$BASE;BDSBASE_TEMP_FIXDYNAMICMODELS"
+		$PreprocessorDefinitions		"$BASE;BDSBASE_ACHIEVEMENT_NOTIFICATIONS"
+		$PreprocessorDefinitions		"$BASE;BDSBASE_DISCORD"
+		//$PreprocessorDefinitions		"$BASE;BDSBASE_NPC"
+		//$PreprocessorDefinitions		"$BASE;BDSBASE_ALLOW_C_ARMS"
 	}
 }
 
@@ -329,8 +329,8 @@ $Project "Server (HL2MP)"
 			$File	"$SRCDIR\game\shared\hl2mp\hl2mp_player_shared.h"
 			$File	"$SRCDIR\game\shared\hl2mp\hl2mp_weapon_parse.cpp"
 			$File	"$SRCDIR\game\shared\hl2mp\hl2mp_weapon_parse.h"
-			$File	"hl2mp\hl2mp_bot_temp.cpp" [$BDSBASE]
-			$File	"hl2mp\hl2mp_bot_temp.h" [$BDSBASE]
+			$File	"hl2mp\hl2mp_bot_temp.cpp"
+			$File	"hl2mp\hl2mp_bot_temp.h"
 
 			$Folder "Bots"
 			{

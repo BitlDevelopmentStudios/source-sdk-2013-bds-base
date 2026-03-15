@@ -60,8 +60,7 @@ $Configuration
 
 	$Compiler
 	{
-		$AdditionalIncludeDirectories	"$BASE;.\;$SRCDIR\game\shared;$SRCDIR\utils\common;$SRCDIR\game\shared\econ;$SRCDIR\game\server\NextBot" [!$BDSBASE]
-		$AdditionalIncludeDirectories	"$BASE;.\;$SRCDIR\game\shared;$SRCDIR\utils\common;$SRCDIR\game\shared\econ;$SRCDIR\game\server\NextBot;$SRCDIR\game\shared\bdsbase;$SRCDIR\game\server\bdsbase" [$BDSBASE]
+		$AdditionalIncludeDirectories	"$BASE;.\;$SRCDIR\game\shared;$SRCDIR\utils\common;$SRCDIR\game\shared\econ;$SRCDIR\game\server\NextBot;$SRCDIR\game\shared\bdsbase;$SRCDIR\game\server\bdsbase"
 		$PreprocessorDefinitions		"$BASE;GAME_DLL;VECTOR;VERSION_SAFE_STEAM_API_INTERFACES;PROTECTED_THINGS_ENABLE;sprintf=use_Q_snprintf_instead_of_sprintf;strncpy=use_Q_strncpy_instead;_snprintf=use_Q_snprintf_instead"
 		$PreprocessorDefinitions		"$BASE;INCLUDED_STEAM2_USERID_STRUCTS" 
 		$PreprocessorDefinitions		"$BASE;SWDS" [$POSIX]
@@ -434,7 +433,7 @@ $Project
 		$File	"$SRCDIR\game\shared\interval.h"
 		$File	"$SRCDIR\public\iregistry.h"
 		$File	"$SRCDIR\game\shared\iscenetokenprocessor.h"
-		$File	"$SRCDIR\game\shared\handviewmodel_shared.cpp" [$BDSBASE]
+		$File	"$SRCDIR\game\shared\handviewmodel_shared.cpp"
 		$File	"iservervehicle.h"
 		$File	"item_world.cpp"
 		$File	"items.h"
@@ -613,7 +612,7 @@ $Project
 		$File	"$SRCDIR\public\stringregistry.h"
 		$File	"$SRCDIR\game\shared\studio_shared.cpp"
 		$File	"subs.cpp"
-        $File	"subs.h"  [$BDSBASE]
+        $File	"subs.h"
 		$File	"sun.cpp"
 		$File	"tactical_mission.cpp"
 		$File	"tactical_mission.h"
@@ -740,16 +739,16 @@ $Project
 			}
 		}
 		
-		$Folder	"Admin" [$BDSBASE]
+		$Folder	"Admin"
 		{
-			$File	"bdsbase\admin\base_serveradmin.cpp" [$BDSBASE]
-			$File	"bdsbase\admin\base_serveradmin.h" [$BDSBASE]
-			$File	"bdsbase\admin\serveradmin_core.h" [$BDSBASE]
-			$File	"bdsbase\admin\serveradmin_register.h" [$BDSBASE]
+			$File	"bdsbase\admin\base_serveradmin.cpp"
+			$File	"bdsbase\admin\base_serveradmin.h"
+			$File	"bdsbase\admin\serveradmin_core.h"
+			$File	"bdsbase\admin\serveradmin_register.h"
 			
-			$Folder	"Commands" [$BDSBASE]
+			$Folder	"Commands"
 			{
-				$File	"bdsbase\admin\command\serveradmin_command_base.h" [$BDSBASE]
+				$File	"bdsbase\admin\command\serveradmin_command_base.h"
 			}
 		}
 
