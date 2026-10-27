@@ -11,3 +11,6 @@ As you can tell, this mod had a bit of an identity crisis, which was problematic
 Near the end of development, bunny hopping and most custom weapons were removed as I wanted to rebuild the mod from the ground up. However, this last-ditch effort didn't revive the mod and it was later cancelled.
 
 This public version of the mod has been uploaded here for historical reasons. The source code remains on https://github.com/BitlDevelopmentStudios/source-sdk-2013-bds-base if you wish to look at how the mod functioned, and maybe integrate some of its features into your TF2 mod. 
+
+this PUB build readds all the cut weapons removed during the attempt to revive the mod. the cut weapons were removed from the items_custom, but were easy enough to readd. The Afterburner no longer has its original custom model and killicon as they were leaked community made content, and I didn't feel comfortable distributing the leaked content.
+
