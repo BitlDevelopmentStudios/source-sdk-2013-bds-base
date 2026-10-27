@@ -1,3 +1,10 @@
+Quiver PUB 1.0.0:
+- Readded all custom items for historic purposes.
+
+---------------------------------------------------------------------------------------------
+PUB (Public Unfinished Build)
+---------------------------------------------------------------------------------------------
+
 Quiver IRB 2.0.0:
 Details:
 - Removed bunnyhopping.
