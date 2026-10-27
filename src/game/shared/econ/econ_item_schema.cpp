@@ -3211,16 +3211,21 @@ bool CEconItemDefinition::BInitFromKV( KeyValues *pKVItem, CUtlVector<CUtlString
 
 #ifdef QUIVER_DLL
 		// Bleed. for EIGHT SECONDS.
-		if (!m_bSoloItem && CommandLine()->FindParm("-bleedfor8seconds"))
+		if (!m_bSoloItem)
 		{
 			m_bSoloItem = m_pKVItem->GetInt("jokeitem", 0) != 0;
-		}
-#endif
 
+			if (!m_bSoloItem)
+			{
+				m_bSoloItem = m_pKVItem->GetInt("staging", 0) != 0;
+			}
+		}
+#else
 		if (!m_bSoloItem && CommandLine()->FindParm("-customstaging"))
 		{
 			m_bSoloItem = m_pKVItem->GetInt("staging", 0) != 0;
 		}
+#endif
 	}
 #else
 	//if there's no custom schema, no items can be solo items.

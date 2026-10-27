@@ -23,6 +23,7 @@
 		"quiver_customweapon"
 		{
 			"prefab"		"quiver"
+			"propername"	"0"
 			"customitem" "1"
 		}
 		
@@ -30,6 +31,7 @@
 		{
 			"prefab"		"quiver"
 			"item_description"	"#Quiver_Joke_Desc"
+			"propername"	"0"
 			"jokeitem" "1"
 		}
 		
@@ -38,6 +40,7 @@
 			"prefab"		"quiver"
 			"item_quality"		"selfmade"
 			"item_description"	"#Quiver_Test_Desc"
+			"propername"	"0"
 			"staging" "1"
 		}
 	
@@ -169,7 +172,6 @@
 			"item_name"	"#Quiver_Railgun"
 			"item_description"	"#TF_DEX_Rifle_Desc"
 			"item_slot"	"primary"
-			"propername"	"1"
 			"item_logname"	"railgun"
 			"item_iconname"		"shooting_star"
 			"image_inventory"		"backpack/workshop/weapons/c_models/c_invasion_sniperrifle/c_invasion_sniperrifle"
@@ -334,7 +336,6 @@
 			"item_description"	"#Quiver_Inspired_TF2PostLaunch"
 			"item_logname"	"unique_pickaxe"
 			"item_slot"	"melee"
-			"propername"	"1"
 			"min_ilevel"	"10"
 			"max_ilevel"	"10"
 			"image_inventory" "backpack/weapons/c_models/c_pickaxe/c_pickaxe"
@@ -432,7 +433,6 @@
 			"item_name"	"#Quiver_Joke_lexecutor"
 			"item_description"	"#Quiver_Joke_lexecutor_Desc"
 			"item_slot"	"secondary"
-			"propername"	"1"
 			"item_logname"	"bleedfor8seconds"
 			"item_iconname"	"enforcer"
 			"image_inventory"	"backpack/workshop/weapons/c_models/c_snub_nose/c_snub_nose"
@@ -481,7 +481,6 @@
 			"item_type_name"	"#TF_Weapon_Medigun"
 			"item_name"			"#Quiver_ArmorHealerMedigun"
 			"item_description"	"#Attrib_Medigun_UnbreakableArmor_Penalty"
-			"propername"		"1"
 			"item_slot"		"secondary"
 			"equip_region"	"medigun_backpack"
 			"image_inventory"	"backpack/workshop/weapons/c_models/c_medigun_defense/c_medigun_defense"
@@ -599,7 +598,6 @@
 			"item_slot"		"secondary"
 			"equip_region"	"arms"
 			"anim_slot"		"FORCE_NOT_USED"
-			"propername"	"1"
 			"min_ilevel"		"1"
 			"max_ilevel"		"99"
 			"item_logname"	"jumpshield"
@@ -695,7 +693,6 @@
 			//"model_player"	"models/workshop/weapons/c_models/c_pilot_flamer/c_pilot_flamer.mdl"
 			"attach_to_hands"	"1"
 			"inspect_panel_dist" "91"
-			"propername"	"1"
 			"used_by_classes"
 			{
 				"pyro"	"1"
