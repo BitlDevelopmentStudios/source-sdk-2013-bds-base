@@ -431,7 +431,7 @@
 			}
 			"item_type_name"	"#TF_Weapon_Revolver"
 			"item_name"	"#Quiver_Joke_lexecutor"
-			"item_description"	"#Quiver_Joke_lexecutor_Desc"
+			//"item_description"	"#Quiver_Joke_lexecutor_Desc"
 			"item_slot"	"secondary"
 			"item_logname"	"bleedfor8seconds"
 			"item_iconname"	"enforcer"
